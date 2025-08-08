@@ -1,4 +1,3 @@
-"use client";
 import invariant from "tiny-invariant";
 
 import type { CleanupFn } from "@atlaskit/pragmatic-drag-and-drop/types";

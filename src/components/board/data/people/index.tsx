@@ -1,4 +1,3 @@
-"use client";
 import dynboard from "../../pieces/board/dynboard";
 import opening from "./opening";
 

@@ -1,24 +1,14 @@
-"use client";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { createPortal } from "react-dom";
 import invariant from "tiny-invariant";
-
-import { IconButton } from "@atlaskit/button/new";
-import DropdownMenu, {
-  type CustomTriggerProps,
-  DropdownItem,
-  DropdownItemGroup,
-} from "@atlaskit/dropdown-menu";
 // eslint-disable-next-line @atlaskit/design-system/no-banned-imports
-import mergeRefs from "@atlaskit/ds-lib/merge-refs";
 import Heading from "@atlaskit/heading";
 // This is the smaller MoreIcon soon to be more easily accessible with the
 // ongoing icon project
-import MoreIcon from "@atlaskit/icon/core/migration/show-more-horizontal--editor-more";
+
 import { easeInOut } from "@atlaskit/motion/curves";
 import { durations } from "@atlaskit/motion/durations";
-import { fg } from "@atlaskit/platform-feature-flags";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import {
   attachClosestEdge,
@@ -44,7 +34,7 @@ import { Card } from "./card";
 import {
   ColumnContext,
   type ColumnContextProps,
-  useColumnContext,
+  // useColumnContext,
 } from "./column-context";
 
 const columnStyles = xcss({
@@ -361,69 +351,69 @@ function SafariColumnPreview({ column }: { column: ColumnType }) {
   );
 }
 
-function ActionMenu() {
-  return (
-    <DropdownMenu
-      trigger={DropdownMenuTrigger}
-      shouldRenderToParent={fg(
-        "should-render-to-parent-should-be-true-design-syst"
-      )}
-    >
-      <ActionMenuItems />
-    </DropdownMenu>
-  );
-}
+// function ActionMenu() {
+//   return (
+//     <DropdownMenu
+//       trigger={DropdownMenuTrigger}
+//       shouldRenderToParent={fg(
+//         "should-render-to-parent-should-be-true-design-syst"
+//       )}
+//     >
+//       <ActionMenuItems />
+//     </DropdownMenu>
+//   );
+// }
 
-function ActionMenuItems() {
-  const { columnId } = useColumnContext();
-  const { getColumns, reorderColumn } = useBoardContext();
+// function ActionMenuItems() {
+//   const { columnId } = useColumnContext();
+//   const { getColumns, reorderColumn } = useBoardContext();
 
-  const columns = getColumns();
-  const startIndex = columns.findIndex(
-    (column) => column.columnId === columnId
-  );
+//   const columns = getColumns();
+//   const startIndex = columns.findIndex(
+//     (column) => column.columnId === columnId
+//   );
 
-  const moveLeft = useCallback(() => {
-    reorderColumn({
-      startIndex,
-      finishIndex: startIndex - 1,
-    });
-  }, [reorderColumn, startIndex]);
+//   const moveLeft = useCallback(() => {
+//     reorderColumn({
+//       startIndex,
+//       finishIndex: startIndex - 1,
+//     });
+//   }, [reorderColumn, startIndex]);
 
-  const moveRight = useCallback(() => {
-    reorderColumn({
-      startIndex,
-      finishIndex: startIndex + 1,
-    });
-  }, [reorderColumn, startIndex]);
+//   const moveRight = useCallback(() => {
+//     reorderColumn({
+//       startIndex,
+//       finishIndex: startIndex + 1,
+//     });
+//   }, [reorderColumn, startIndex]);
 
-  const isMoveLeftDisabled = startIndex === 0;
-  const isMoveRightDisabled = startIndex === columns.length - 1;
+//   const isMoveLeftDisabled = startIndex === 0;
+//   const isMoveRightDisabled = startIndex === columns.length - 1;
 
-  return (
-    <DropdownItemGroup>
-      <DropdownItem onClick={moveLeft} isDisabled={isMoveLeftDisabled}>
-        Move left
-      </DropdownItem>
-      <DropdownItem onClick={moveRight} isDisabled={isMoveRightDisabled}>
-        Move right
-      </DropdownItem>
-    </DropdownItemGroup>
-  );
-}
+//   return (
+//     <DropdownItemGroup>
+//       <DropdownItem onClick={moveLeft} isDisabled={isMoveLeftDisabled}>
+//         Move left
+//       </DropdownItem>
+//       <DropdownItem onClick={moveRight} isDisabled={isMoveRightDisabled}>
+//         Move right
+//       </DropdownItem>
+//     </DropdownItemGroup>
+//   );
+// }
 
-function DropdownMenuTrigger({
-  triggerRef,
-  ...triggerProps
-}: CustomTriggerProps) {
-  return (
-    <IconButton
-      ref={mergeRefs([triggerRef])}
-      appearance="subtle"
-      label="Actions"
-      spacing="compact"
-      icon={(iconProps) => <MoreIcon {...iconProps} size="small" />}
-      {...triggerProps}
-    />
-  );
-}
+// function DropdownMenuTrigger({
+//   triggerRef,
+//   ...triggerProps
+// }: CustomTriggerProps) {
+//   return (
+//     <IconButton
+//       ref={mergeRefs([triggerRef])}
+//       appearance="subtle"
+//       label="Actions"
+//       spacing="compact"
+//       icon={(iconProps) => <MoreIcon {...iconProps} size="small" />}
+//       {...triggerProps}
+//     />
+//   );
+// }

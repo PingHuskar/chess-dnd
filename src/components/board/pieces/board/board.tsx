@@ -1,5 +1,3 @@
-"use client";
-
 import { forwardRef, memo, type ReactNode, useEffect } from "react";
 
 import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
