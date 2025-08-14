@@ -16,7 +16,7 @@ import {
   type ColumnType,
   type Person,
 } from "./board/data/people";
-import Board from "./board/pieces/people/board";
+import Board from "./board/pieces/people/boardColumn";
 import {
   BoardContext,
   type BoardContextValue,

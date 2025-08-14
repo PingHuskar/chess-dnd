@@ -13,6 +13,11 @@ export function List() {
     const [tasks, setTasks] = useState<TTask[]>(() => getTasks());
     const [isSorted, setIsSorted] = useState<boolean | undefined>(undefined)
 
+    const handleShuffleTasks = () => {
+        setTasks(getTasks())
+        setIsSorted(undefined)
+    }
+
     const handleCheckSorted = () => {
         setIsSorted(() => {
             return isTaskSorted(tasks, ["op", "md", "en"])
@@ -71,14 +76,19 @@ export function List() {
     }, [tasks]);
 
     return (
-        <div className="pt-6 my-0 mx-auto w-[420px]">
+        <div className="pt-6 my-0 mx-auto w-full">
             <div className="">isSorted: {`${isSorted}`}</div>
-            <button type="button" onClick={handleCheckSorted}>Check Sort</button>
-            <div className="flex flex-col gap-2 border border-solid rounded p-2">
+            <div className="flex flex-row w-full h-28 flex-wrap gap-2 border border-solid rounded p-2">
                 {tasks.map((task) => (
                     <Task key={task.id} task={task} />
                 ))}
             </div>
+            <button type="button" onClick={handleShuffleTasks}>
+                Shuffle
+            </button>
+            <button type="button" onClick={handleCheckSorted}>
+                Check Sort
+            </button>
         </div>
     );
 }
