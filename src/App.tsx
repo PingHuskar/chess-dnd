@@ -4,11 +4,13 @@ import PeopleBoard from './components/PeopleBoard'
 import { getBasicData, getColumnItems, type ColumnMap } from './components/board/data/chess';
 import opening from './components/board/data/chess/opening';
 import { getBasicData as getPeople } from './components/board/data/people';
+import { List } from './components/list/list';
 
 function App() {
 
   return (
     <>
+      <List />
       <Board height={1000} initData={() => {
         const columnMap: ColumnMap = {
           null: getColumnItems(opening, "null"),
@@ -39,13 +41,14 @@ function App() {
         };
       }} />
       <hr />
-      <PeopleBoard height={1400} initData={() => {
-        const base = getPeople();
-        return {
-          ...base,
-          lastOperation: null,
-        };
-      }} />
+      <PeopleBoard
+        initData={() => {
+          const base = getPeople();
+          return {
+            ...base,
+            lastOperation: null,
+          };
+        }} />
     </>
   )
 }
