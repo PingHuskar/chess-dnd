@@ -58,11 +58,10 @@ export type BoardState = {
 };
 
 export type BoardExampleProps = {
-  height: number,
   initData: () => BoardState
 }
 
-export default function PeopleBoard({ height, initData }: BoardExampleProps) {
+export default function PeopleBoard({ initData }: BoardExampleProps) {
   const [data, setData] = useState<BoardState>(initData);
 
   const stableData = useRef(data);
@@ -469,10 +468,9 @@ export default function PeopleBoard({ height, initData }: BoardExampleProps) {
   return (
     <>
       <BoardContext.Provider value={contextValue}>
-        <Board height={height}>
+        <Board>
           {data.orderedColumnIds.map((columnId) => {
             return <Column
-              height={height - 20}
               column={data.columnMap[columnId]}
               key={columnId}
             />;

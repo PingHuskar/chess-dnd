@@ -26,23 +26,23 @@ import { createRegistry } from "./board/pieces/chess/registry";
 
 export type Outcome =
   | {
-      type: "column-reorder";
-      columnId: string;
-      startIndex: number;
-      finishIndex: number;
-    }
+    type: "column-reorder";
+    columnId: string;
+    startIndex: number;
+    finishIndex: number;
+  }
   | {
-      type: "card-reorder";
-      columnId: string;
-      startIndex: number;
-      finishIndex: number;
-    }
+    type: "card-reorder";
+    columnId: string;
+    startIndex: number;
+    finishIndex: number;
+  }
   | {
-      type: "card-move";
-      finishColumnId: string;
-      itemIndexInStartColumn: number;
-      itemIndexInFinishColumn: number;
-    };
+    type: "card-move";
+    finishColumnId: string;
+    itemIndexInStartColumn: number;
+    itemIndexInFinishColumn: number;
+  };
 
 export type Trigger = "pointer" | "keyboard";
 
@@ -57,12 +57,12 @@ export type BoardState = {
   lastOperation: Operation | null;
 };
 
-export type BoardExampleProps = { 
-  height: number, 
-  initData: () => BoardState 
+export type BoardExampleProps = {
+  height: number,
+  initData: () => BoardState
 }
 
-export default function BoardExample({ height, initData }: BoardExampleProps) {
+export default function ChessBoard({ height, initData }: BoardExampleProps) {
   const [data, setData] = useState<BoardState>(initData);
 
   const stableData = useRef(data);
@@ -90,8 +90,7 @@ export default function BoardExample({ height, initData }: BoardExampleProps) {
       triggerPostMoveFlash(entry.element);
 
       liveRegion.announce(
-        `You've moved ${sourceColumn.title} from position ${
-          startIndex + 1
+        `You've moved ${sourceColumn.title} from position ${startIndex + 1
         } to position ${finishIndex + 1} of ${orderedColumnIds.length}.`
       );
 
@@ -113,10 +112,8 @@ export default function BoardExample({ height, initData }: BoardExampleProps) {
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${
-          startIndex + 1
-        } to position ${finishIndex + 1} of ${column.items.length} in the ${
-          column.title
+        `You've moved ${item.name} from position ${startIndex + 1
+        } to position ${finishIndex + 1} of ${column.items.length} in the ${column.title
         } column.`
       );
 
@@ -147,10 +144,8 @@ export default function BoardExample({ height, initData }: BoardExampleProps) {
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${
-          itemIndexInStartColumn + 1
-        } to position ${finishPosition} in the ${
-          destinationColumn.title
+        `You've moved ${item.name} from position ${itemIndexInStartColumn + 1
+        } to position ${finishPosition} in the ${destinationColumn.title
         } column.`
       );
 
@@ -473,14 +468,14 @@ export default function BoardExample({ height, initData }: BoardExampleProps) {
 
   return (
     <>
-    <BoardContext.Provider value={contextValue}>
-      {/* {JSON.stringify(data)} */}
+      <BoardContext.Provider value={contextValue}>
+        {/* {JSON.stringify(data)} */}
         <Board height={height}>
-        {data.orderedColumnIds.map((columnId) => {
-          return <Column height={height-20} column={data.columnMap[columnId]} key={columnId} />;
-        })}
-      </Board>
-    </BoardContext.Provider>
+          {data.orderedColumnIds.map((columnId) => {
+            return <Column height={height - 20} column={data.columnMap[columnId]} key={columnId} />;
+          })}
+        </Board>
+      </BoardContext.Provider>
     </>
   );
 }

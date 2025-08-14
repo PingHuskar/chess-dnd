@@ -177,7 +177,7 @@ export function getBasicData() {
         confluence: {
             title: "Confluence",
             columnId: "confluence",
-            items: getPeople({ amount: 10 }),
+            items: getPeople({ amount: 20 }),
         },
         jira: {
             title: "Jira",
@@ -187,7 +187,7 @@ export function getBasicData() {
         trello: {
             title: "Trello",
             columnId: "trello",
-            items: getPeople({ amount: 10 }),
+            items: getPeople({ amount: 0 }),
         },
     };
 

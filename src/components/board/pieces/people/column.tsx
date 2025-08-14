@@ -138,7 +138,7 @@ const isDraggingStyles = xcss({
   opacity: 0.4,
 });
 
-export const Column = memo(function Column({ height, column }: { height: number, column: ColumnType }) {
+export const Column = memo(function Column({ column }: { column: ColumnType }) {
   const columnId = column.columnId;
   const columnRef = useRef<HTMLDivElement | null>(null);
   const columnInnerRef = useRef<HTMLDivElement | null>(null);
@@ -274,20 +274,23 @@ export const Column = memo(function Column({ height, column }: { height: number,
   }, []);
 
   const getNumCards = useCallback(() => {
-    return stableItems.current.length;
+    return stableItems.current.length + 1;
   }, []);
 
   const contextValue: ColumnContextProps = useMemo(() => {
     return { columnId, getCardIndex, getNumCards };
   }, [columnId, getCardIndex, getNumCards]);
 
+  const eachCardHeight = 74;
+  const heightIfColumnEmpty = 100;
+
   return (
     <ColumnContext.Provider value={contextValue}>
       <Flex
         testId={`column-${columnId}`}
         ref={columnRef}
-        direction="column"
-        xcss={[getColumnStyle(`${height}px`), stateStyles[state.type]]}
+        direction="row"
+        xcss={[getColumnStyle(`${column.items.length == 0 ? heightIfColumnEmpty : (column.items.length + 0.5) * eachCardHeight}px`), stateStyles[state.type]]}
       >
         {/* This element takes up the same visual space as the column.
           We are using a separate element so we can have two drop targets

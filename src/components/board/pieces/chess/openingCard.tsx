@@ -224,7 +224,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
                     actionMenuTriggerRef
                       ? mergeRefs([triggerRef, actionMenuTriggerRef])
                       : // Workaround for IconButton typing issue
-                        mergeRefs([triggerRef])
+                      mergeRefs([triggerRef])
                   }
                   icon={(iconProps) => <MoreIcon {...iconProps} size="small" />}
                   label={`Move ${name}`}
