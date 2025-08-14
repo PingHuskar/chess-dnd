@@ -7,19 +7,22 @@ import { Box, xcss } from "@atlaskit/primitives";
 import { useBoardContext } from "./board-context";
 
 type BoardProps = {
+  height: number;
   children: ReactNode;
 };
 
-const boardStyles = xcss({
-  display: "flex",
-  justifyContent: "center",
-  gap: "space.200",
-  flexDirection: "row",
-  height: "480px",
-});
+const getBoardStyles = (height: number) => {
+  return xcss({
+    display: "flex",
+    justifyContent: "center",
+    gap: "space.100",
+    flexDirection: "row",
+    height: `${height}px`,
+  });
+}
 
 const Board = forwardRef<HTMLDivElement, BoardProps>(
-  ({ children }: BoardProps, ref) => {
+  ({ height, children }: BoardProps, ref) => {
     const { instanceId } = useBoardContext();
 
     useEffect(() => {
@@ -29,7 +32,7 @@ const Board = forwardRef<HTMLDivElement, BoardProps>(
     }, [instanceId]);
 
     return (
-      <Box xcss={boardStyles} ref={ref}>
+      <Box xcss={getBoardStyles(height)} ref={ref}>
         {children}
       </Box>
     );

@@ -97,4 +97,4 @@ export default [
     group: `null`,
     url: ``,
   },
-];
+].filter(d => d.fen);

@@ -14,18 +14,17 @@ import { reorder } from "@atlaskit/pragmatic-drag-and-drop/reorder";
 import {
   type ColumnMap,
   type ColumnType,
-  getBasicData,
   type Person,
-} from "./board/data/people";
-import Board from "./board/pieces/board/board";
+} from "./board/data/chess";
+import Board from "./board/pieces/chess/board";
 import {
   BoardContext,
   type BoardContextValue,
-} from "./board/pieces/board/board-context";
-import { Column } from "./board/pieces/board/column";
-import { createRegistry } from "./board/pieces/board/registry";
+} from "./board/pieces/chess/board-context";
+import { Column } from "./board/pieces/chess/column";
+import { createRegistry } from "./board/pieces/chess/registry";
 
-type Outcome =
+export type Outcome =
   | {
       type: "column-reorder";
       columnId: string;
@@ -45,27 +44,26 @@ type Outcome =
       itemIndexInFinishColumn: number;
     };
 
-type Trigger = "pointer" | "keyboard";
+export type Trigger = "pointer" | "keyboard";
 
-type Operation = {
+export type Operation = {
   trigger: Trigger;
   outcome: Outcome;
 };
 
-type BoardState = {
+export type BoardState = {
   columnMap: ColumnMap;
   orderedColumnIds: string[];
   lastOperation: Operation | null;
 };
 
-export default function BoardExample() {
-  const [data, setData] = useState<BoardState>(() => {
-    const base = getBasicData();
-    return {
-      ...base,
-      lastOperation: null,
-    };
-  });
+export type BoardExampleProps = { 
+  height: number, 
+  initData: () => BoardState 
+}
+
+export default function BoardExample({ height, initData }: BoardExampleProps) {
+  const [data, setData] = useState<BoardState>(initData);
 
   const stableData = useRef(data);
   useEffect(() => {
@@ -474,13 +472,15 @@ export default function BoardExample() {
   }, [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]);
 
   return (
+    <>
     <BoardContext.Provider value={contextValue}>
       {/* {JSON.stringify(data)} */}
-      <Board>
+        <Board height={height}>
         {data.orderedColumnIds.map((columnId) => {
-          return <Column column={data.columnMap[columnId]} key={columnId} />;
+          return <Column height={height-20} column={data.columnMap[columnId]} key={columnId} />;
         })}
       </Board>
     </BoardContext.Provider>
+    </>
   );
 }

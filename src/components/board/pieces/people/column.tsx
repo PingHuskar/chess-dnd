@@ -37,20 +37,22 @@ import {
   // useColumnContext,
 } from "./column-context";
 
-const columnStyles = xcss({
-  width: "250px",
-  height: "2500px",
-  backgroundColor: "elevation.surface.sunken",
-  borderRadius: "border.radius.300",
-  // eslint-disable-next-line @atlaskit/ui-styling-standard/no-unsafe-values, @atlaskit/ui-styling-standard/no-imported-style-values
-  transition: `background ${durations.medium}ms ${easeInOut}`,
-  position: "relative",
-  /**
-   * TODO: figure out hover color.
-   * There is no `elevation.surface.sunken.hovered` token,
-   * so leaving this for now.
-   */
-});
+const getColumnStyle = (height: string) => {
+  return xcss({
+    width: "250px",
+    height,
+    backgroundColor: "elevation.surface.sunken",
+    borderRadius: "border.radius.300",
+    // eslint-disable-next-line @atlaskit/ui-styling-standard/no-unsafe-values, @atlaskit/ui-styling-standard/no-imported-style-values
+    transition: `background ${durations.medium}ms ${easeInOut}`,
+    position: "relative",
+    /**
+     * TODO: figure out hover color.
+     * There is no `elevation.surface.sunken.hovered` token,
+     * so leaving this for now.
+     */
+  });
+}
 
 const stackStyles = xcss({
   // allow the container to be shrunk by a parent height
@@ -136,7 +138,7 @@ const isDraggingStyles = xcss({
   opacity: 0.4,
 });
 
-export const Column = memo(function Column({ column }: { column: ColumnType }) {
+export const Column = memo(function Column({ height, column }: { height: number, column: ColumnType }) {
   const columnId = column.columnId;
   const columnRef = useRef<HTMLDivElement | null>(null);
   const columnInnerRef = useRef<HTMLDivElement | null>(null);
@@ -285,7 +287,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
         testId={`column-${columnId}`}
         ref={columnRef}
         direction="column"
-        xcss={[columnStyles, stateStyles[state.type]]}
+        xcss={[getColumnStyle(`${height}px`), stateStyles[state.type]]}
       >
         {/* This element takes up the same visual space as the column.
           We are using a separate element so we can have two drop targets
