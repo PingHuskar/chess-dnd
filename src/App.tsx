@@ -48,6 +48,7 @@ function App() {
       <PeopleBoardColumn
         initData={() => {
           const base = getPeople();
+          // console.log(base)
           return {
             ...base,
             lastOperation: null,
@@ -56,6 +57,7 @@ function App() {
       <PeopleBoardRow
         initData={() => {
           const base = getPeople();
+          console.log(base)
           return {
             ...base,
             lastOperation: null,

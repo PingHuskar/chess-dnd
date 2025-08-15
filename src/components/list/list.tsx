@@ -89,6 +89,11 @@ export function List() {
             <button type="button" onClick={handleCheckSorted}>
                 Check Sort
             </button>
+            <ol className={`text-left list-decimal`}>
+                {tasks.map((t, i) => {
+                    return <li key={i}>{t.content}</li>
+                })}
+            </ol>
         </div>
     );
 }

@@ -37,10 +37,12 @@ import {
   // useColumnContext,
 } from "./column-context";
 
-const getColumnStyle = (height: string) => {
+const getColumnStyle = (
+  // height: string
+) => {
   return xcss({
     width: "250px",
-    height,
+    // height,
     backgroundColor: "elevation.surface.sunken",
     borderRadius: "border.radius.300",
     // eslint-disable-next-line @atlaskit/ui-styling-standard/no-unsafe-values, @atlaskit/ui-styling-standard/no-imported-style-values
@@ -281,8 +283,8 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
     return { columnId, getCardIndex, getNumCards };
   }, [columnId, getCardIndex, getNumCards]);
 
-  const eachCardHeight = 74;
-  const heightIfColumnEmpty = 100;
+  // const eachCardHeight = 74;
+  // const heightIfColumnEmpty = 100;
 
   return (
     <ColumnContext.Provider value={contextValue}>
@@ -290,7 +292,12 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
         testId={`column-${columnId}`}
         ref={columnRef}
         direction="row"
-        xcss={[getColumnStyle(`${column.items.length == 0 ? heightIfColumnEmpty : (column.items.length + 0.5) * eachCardHeight}px`), stateStyles[state.type]]}
+        xcss={[getColumnStyle(
+          // `${column.items.length == 0
+          // ? heightIfColumnEmpty
+          // : (column.items.length + 0.5) * eachCardHeight}px`
+        )
+          , stateStyles[state.type]]}
       >
         {/* This element takes up the same visual space as the column.
           We are using a separate element so we can have two drop targets

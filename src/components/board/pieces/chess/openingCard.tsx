@@ -100,8 +100,8 @@ function MoveToOtherColumnItem({
   targetColumn,
   startIndex,
 }: {
-  targetColumn: ColumnType;
-  startIndex: number;
+  readonly targetColumn: ColumnType;
+  readonly startIndex: number;
 }) {
   const { moveCard } = useBoardContext();
   const { columnId } = useColumnContext();
@@ -117,7 +117,7 @@ function MoveToOtherColumnItem({
   return <DropdownItem onClick={onClick}>{targetColumn.title}</DropdownItem>;
 }
 
-function LazyDropdownItems({ userId }: { userId: string }) {
+function LazyDropdownItems({ userId }: { readonly userId: string }) {
   const { getColumns, reorderCard } = useBoardContext();
   const { columnId, getCardIndex, getNumCards } = useColumnContext();
 

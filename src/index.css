@@ -73,3 +73,12 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* div[id^="Stack-"] {
+  background: #000;
+} */
+
+div[id^="Stack-"] span::first-letter {
+  font-size: 1.5em;
+  /* background: #000; */
+}

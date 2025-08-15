@@ -31,7 +31,7 @@ const Board = forwardRef<HTMLDivElement, BoardProps>(
     }, [instanceId]);
 
     return (
-      <Box xcss={getBoardStyles(300)} ref={ref}>
+      <Box xcss={getBoardStyles(1200)} ref={ref}>
         {children}
       </Box>
     );

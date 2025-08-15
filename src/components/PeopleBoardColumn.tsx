@@ -24,6 +24,8 @@ import {
 import { Column } from "./board/pieces/people/column";
 import { createRegistry } from "./board/pieces/people/registry";
 
+import unique from "../lib/unique";
+
 export type Outcome =
   | {
     type: "column-reorder";
@@ -58,11 +60,13 @@ export type BoardState = {
 };
 
 export type BoardExampleProps = {
-  initData: () => BoardState
+  readonly initData: () => BoardState
 }
 
 export default function PeopleBoard({ initData }: BoardExampleProps) {
   const [data, setData] = useState<BoardState>(initData);
+
+  const ref_group = useRef<HTMLInputElement>(null)
 
   const stableData = useRef(data);
   useEffect(() => {
@@ -153,8 +157,6 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
        * This means we need to manually restore focus to it.
        */
       entry.actionMenuTrigger.focus();
-
-      return;
     }
   }, [lastOperation, registry]);
 
@@ -357,7 +359,7 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
           if (source.data.type === "card") {
             const itemId = source.data.itemId;
             invariant(typeof itemId === "string");
-            // TODO: these lines not needed if item has columnId on it
+
             const [, startColumnRecord] = location.initial.dropTargets;
             const sourceId = startColumnRecord.data.columnId;
             invariant(typeof sourceId === "string");
@@ -465,11 +467,79 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
     };
   }, [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]);
 
+  const [h, setH] = useState(data.orderedColumnIds.length);
+  const [countCards, setCountCards] = useState(data.orderedColumnIds.reduce(
+    (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+    0
+  ));
+
+  const estimateHeadingHeightAndGap = 40 + 8;
+  const estimateCardHeight = 110;
+
+  useEffect(() => {
+    setData(prev => ({
+      ...prev,
+      // orderedColumnIds: [...prev.orderedColumnIds, "g5"],
+    }));
+  }, [])
+
+  function handleAddColumn() {
+    if (!ref_group.current?.value) return;
+    if (data.orderedColumnIds.includes(ref_group.current?.value)) return;
+    const newGroup: string = ref_group.current?.value;
+    setData(prev => ({
+      ...prev,
+      orderedColumnIds: unique([...prev.orderedColumnIds, newGroup]),
+      columnMap: {
+        ...prev.columnMap,
+        [newGroup]: { title: newGroup, columnId: newGroup, items: [] }
+      },
+    }));
+    setH(data.orderedColumnIds.length)
+    setCountCards(data.orderedColumnIds.reduce(
+      (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+      0
+    ))
+  }
+  function handleRemoveColumn() {
+    if (!ref_group.current?.value) return;
+    const group: string = ref_group.current?.value;
+    const { [group]: removedColumn, ...newColumnMap } = data.columnMap;
+
+    setData(prev => ({
+      ...prev,
+      orderedColumnIds: prev.orderedColumnIds.filter(id => id != group),
+      columnMap: newColumnMap,
+    }));
+    setH(data.orderedColumnIds.length)
+    setCountCards(data.orderedColumnIds.reduce(
+      (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+      0
+    ))
+  }
+
   return (
     <>
+      <input
+        type="text"
+        defaultValue=""
+        ref={ref_group}
+        className={`border-2`}
+        placeholder="Group"
+      />
+      <button type="button" onClick={handleAddColumn}>
+        Add
+      </button>
+      <button type="button" onClick={handleRemoveColumn}>
+        Remove
+      </button>
+      <hr />
+      {/* {JSON.stringify(data)}
+      <hr /> */}
       <BoardContext.Provider value={contextValue}>
-        <Board>
+        <Board height={countCards * estimateCardHeight + h * estimateHeadingHeightAndGap}>
           {data.orderedColumnIds.map((columnId) => {
+            // console.log(data.columnMap[columnId])
             return <Column
               column={data.columnMap[columnId]}
               key={columnId}
