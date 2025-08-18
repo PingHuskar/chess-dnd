@@ -23,6 +23,7 @@ import {
 } from "./board/pieces/chess/board-context";
 import { Column } from "./board/pieces/chess/column";
 import { createRegistry } from "./board/pieces/chess/registry";
+import ConfusionMatrix from "./ConfusionMatrix";
 
 export type Outcome =
   | {
@@ -59,10 +60,11 @@ export type BoardState = {
 
 export type BoardExampleProps = {
   readonly height: number,
-  readonly initData: () => BoardState
+  readonly initData: () => BoardState,
+  readonly showMatrix?: boolean,
 }
 
-export default function ChessBoard({ height, initData }: BoardExampleProps) {
+export default function ChessBoard({ height, initData, showMatrix = false }: BoardExampleProps) {
   const [data, setData] = useState<BoardState>(initData);
 
   const stableData = useRef(data);
@@ -467,12 +469,23 @@ export default function ChessBoard({ height, initData }: BoardExampleProps) {
 
   return (
     <BoardContext.Provider value={contextValue}>
-      {/* {JSON.stringify(data)} */}
       <Board height={height}>
         {data.orderedColumnIds.map((columnId) => {
           return <Column height={height - 20} column={data.columnMap[columnId]} key={columnId} />;
         })}
       </Board>
+      {showMatrix
+        && data.columnMap.white
+        && data.columnMap.black
+        &&
+        <ConfusionMatrix matrix={`WhiteBlack`} data={data} />
+      }
+      {showMatrix
+        && data.columnMap.N2
+        && data.columnMap.N3
+        &&
+        <ConfusionMatrix matrix={`KnightLegal`} data={data} />
+      }
     </BoardContext.Provider>
   );
 }

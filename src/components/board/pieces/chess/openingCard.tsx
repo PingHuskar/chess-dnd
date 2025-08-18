@@ -186,6 +186,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
   ) {
     const { imgSrc, name, role, userId } = item;
     // console.log(item)
+    const debugComponent = false;
 
     return (
       <Grid
@@ -203,7 +204,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
             // backgroundColor: group_title == role ? "color.background.accent.green.subtlest" : `elevation.surface`,
             ":hover": {
               // backgroundColor: "color.background.accent.blue.subtlest",
-              backgroundColor: group_title.toLocaleLowerCase() == role ? "color.background.accent.green.subtlest" : `color.background.accent.red.bolder`,
+              backgroundColor: group_title.toLocaleLowerCase() == role.toLocaleLowerCase() ? "color.background.accent.green.subtlest" : `color.background.accent.red.bolder`,
             },
           }),
         ]}
@@ -216,10 +217,13 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
           <Heading size="xsmall" as="span">
             {name}
           </Heading>
-          {/* <Box as="small" xcss={noMarginStyles}>
-            {role}
-          </Box> */}
+          {debugComponent &&
+            <Box as="small" xcss={noMarginStyles}>
+              {role}
+            </Box>
+          }
         </Stack>
+
         <div className="" style={{ visibility: `hidden` }}>
           <Box xcss={buttonColumnStyles}>
             <DropdownMenu

@@ -7,6 +7,8 @@ import opening from './components/board/data/chess/opening';
 import { getBasicData as getPeople } from './components/board/data/people';
 import { List } from './components/list/list';
 import tiles from './components/board/data/chess/tiles';
+import knights from './components/board/data/chess/knights';
+import knightMovesGrid from "./knightMovesGrid";
 
 function App() {
 
@@ -47,8 +49,7 @@ function App() {
         };
       }} />
       <hr />
-      <h2>Check Correct On Hover</h2>
-      <Board height={800} initData={() => {
+      <Board height={800} showMatrix={true} initData={() => {
         const columnMap: ColumnMap = {
           NA: getCoorItems(tiles, "NA"),
           white: getCoorItems(tiles, "white"),
@@ -60,6 +61,31 @@ function App() {
           lastOperation: null,
         };
       }} />
+      <hr />
+      <Board height={800} showMatrix={true} initData={() => {
+        const columnMap: ColumnMap = {
+          NA: getCoorItems(knights, "NA"),
+          N2: getCoorItems(knights, "N2"),
+          N3: getCoorItems(knights, "N3"),
+          N4: getCoorItems(knights, "N4"),
+          N6: getCoorItems(knights, "N6"),
+          N8: getCoorItems(knights, "N8"),
+        };
+        const base = getBasicData(columnMap);
+        return {
+          ...base,
+          lastOperation: null,
+        };
+      }} />
+      <table>
+        {knightMovesGrid.map((r: number[], i: number) => {
+          return <tr key={`${i}${r}`}>
+            {r.map((c: number, ii: number) => {
+              return <td key={`${ii}${c}`}>{c}</td>
+            })}
+          </tr>
+        })}
+      </table>
       <hr />
       <PeopleBoardColumn
         initData={() => {
@@ -74,7 +100,6 @@ function App() {
       <PeopleBoardRow
         initData={() => {
           const base = getPeople();
-          console.log(base)
           return {
             ...base,
             lastOperation: null,
