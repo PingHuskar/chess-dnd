@@ -149,7 +149,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
   const [state, setState] = useState<State>(idle);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const { instanceId, registerColumn } = useBoardContext();
+  const { instanceId, registerColumn, removeCard } = useBoardContext();
 
   useEffect(() => {
     invariant(columnRef.current);
@@ -326,7 +326,11 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
             <Box xcss={scrollContainerStyles} ref={scrollableRef}>
               <Stack xcss={cardListStyles} space="space.100">
                 {column.items.map((item) => (
-                  <Card item={item} key={item.userId} />
+                  <Card
+                    item={item}
+                    key={item.userId}
+                    removeCard={removeCard}
+                  />
                 ))}
               </Stack>
             </Box>

@@ -24,6 +24,8 @@ export type BoardContextValue = {
     itemIndexInFinishColumn?: number;
   }) => void;
 
+  removeCard: (args: { columnId: string; userId: string }) => void;
+
   registerCard: (args: {
     cardId: string;
     entry: {

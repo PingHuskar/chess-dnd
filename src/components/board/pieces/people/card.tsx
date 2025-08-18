@@ -103,6 +103,7 @@ type CardPrimitiveProps = {
   item: Person;
   state: State;
   actionMenuTriggerRef?: Ref<HTMLButtonElement>;
+  removeCard?: (args: { columnId: string; userId: string }) => void;
 };
 
 function MoveToOtherColumnItem({
@@ -189,11 +190,18 @@ function LazyDropdownItems({ userId }: { readonly userId: string }) {
 
 const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
   function CardPrimitive(
-    { closestEdge, item, state, actionMenuTriggerRef },
+    { closestEdge, item, state, actionMenuTriggerRef, removeCard },
     ref
   ) {
     const { avatarUrl, name, role, userId } = item;
-    // console.log(item)
+    const { columnId } = useColumnContext();
+
+    const onContextMenu = (event: React.MouseEvent) => {
+      event.preventDefault();
+      if (removeCard) {
+        removeCard({ columnId, userId });
+      }
+    };
 
     return (
       <Grid
@@ -203,11 +211,9 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
         columnGap="space.100"
         alignItems="center"
         xcss={[baseStyles, stateStyles[state.type]]}
-
+        onContextMenu={onContextMenu}
       >
-        <div className={`flex flex-row`} onContextMenu={() =>
-          alert(name)
-        }>
+        <div className={`flex flex-row`}>
           <Box as="span" xcss={noPointerEventsStyles}>
             {/* <Avatar size="large" src={avatarUrl} /> */}
             <Inline alignBlock="center" alignInline="center" xcss={xcss({
@@ -383,7 +389,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
 //   );
 // });
 
-export const Card = memo(function Card({ item }: { item: Person }) {
+export const Card = memo(function Card({ item, removeCard }: { item: Person; removeCard: (args: { columnId: string; userId: string }) => void; }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const actionMenuTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -411,6 +417,7 @@ export const Card = memo(function Card({ item }: { item: Person }) {
         state={state}
         closestEdge={closestEdge}
         actionMenuTriggerRef={actionMenuTriggerRef}
+        removeCard={removeCard}
       />
 
       {state.type === 'preview' &&
@@ -426,6 +433,7 @@ export const Card = memo(function Card({ item }: { item: Person }) {
               item={item}
               state={state}
               closestEdge={null}
+              removeCard={removeCard}
             />
           </Box>,
           state.container

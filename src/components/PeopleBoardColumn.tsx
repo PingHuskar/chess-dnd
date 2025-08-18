@@ -314,6 +314,40 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
     []
   );
 
+  const removeCard = useCallback(
+    ({
+      columnId,
+      userId,
+    }: {
+      columnId: string;
+      userId: string;
+    }) => {
+      setData((data) => {
+        const column = data.columnMap[columnId];
+        const updatedItems = column.items.filter(
+          (item) => item.userId !== userId
+        );
+
+        const updatedSourceColumn: ColumnType = {
+          ...column,
+          items: updatedItems,
+        };
+
+        const updatedMap: ColumnMap = {
+          ...data.columnMap,
+          [columnId]: updatedSourceColumn,
+        };
+
+        return {
+          ...data,
+          columnMap: updatedMap,
+          lastOperation: null,
+        };
+      });
+    },
+    []
+  );
+
   const [instanceId] = useState(() => Symbol("instance-id"));
 
   useEffect(() => {
@@ -461,11 +495,12 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
       reorderColumn,
       reorderCard,
       moveCard,
+      removeCard,
       registerCard: registry.registerCard,
       registerColumn: registry.registerColumn,
       instanceId,
     };
-  }, [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]);
+  }, [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId, removeCard]);
 
   const [h, setH] = useState(data.orderedColumnIds.length);
   const [countCards, setCountCards] = useState(data.orderedColumnIds.reduce(
