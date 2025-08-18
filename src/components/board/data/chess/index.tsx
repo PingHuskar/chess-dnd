@@ -31,6 +31,22 @@ export function getColumnItems(opening: any, columnName: string) {
   };
 }
 
+export function getCoorItems(coor: any, columnName: string) {
+  return {
+    title:
+      columnName == "null" ? "unset".toUpperCase() : columnName.toUpperCase(),
+    columnId: columnName,
+    items: coor
+      .filter((d: any) => d.group == columnName)
+      .map((d: any) => ({
+        userId: `id:${d.name}`,
+        name: d.name,
+        role: d.group_correct,
+        imgSrc: '',
+      })),
+  };
+}
+
 export function getBasicData(columnMap: ColumnMap) {
   const orderedColumnIds = Object.keys(columnMap);
 

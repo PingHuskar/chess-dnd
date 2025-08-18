@@ -2,15 +2,17 @@ import './App.css'
 import Board from './components/ChessBoard'
 import PeopleBoardRow from './components/PeopleBoardRow'
 import PeopleBoardColumn from './components/PeopleBoardColumn'
-import { getBasicData, getColumnItems, type ColumnMap } from './components/board/data/chess';
+import { getBasicData, getColumnItems, getCoorItems, type ColumnMap } from './components/board/data/chess';
 import opening from './components/board/data/chess/opening';
 import { getBasicData as getPeople } from './components/board/data/people';
 import { List } from './components/list/list';
+import tiles from './components/board/data/chess/tiles';
 
 function App() {
 
   return (
     <>
+      <h2>Vertical Sort</h2>
       <List />
       <br />
       <hr />
@@ -45,15 +47,30 @@ function App() {
         };
       }} />
       <hr />
+      <h2>Check Correct On Hover</h2>
+      <Board height={800} initData={() => {
+        const columnMap: ColumnMap = {
+          NA: getCoorItems(tiles, "NA"),
+          white: getCoorItems(tiles, "white"),
+          black: getCoorItems(tiles, "black"),
+        };
+        const base = getBasicData(columnMap);
+        return {
+          ...base,
+          lastOperation: null,
+        };
+      }} />
+      <hr />
       <PeopleBoardColumn
         initData={() => {
           const base = getPeople();
-          // console.log(base)
           return {
             ...base,
             lastOperation: null,
           };
-        }} />
+        }}
+      />
+      <hr />
       <PeopleBoardRow
         initData={() => {
           const base = getPeople();
@@ -62,7 +79,8 @@ function App() {
             ...base,
             lastOperation: null,
           };
-        }} />
+        }}
+      />
     </>
   )
 }

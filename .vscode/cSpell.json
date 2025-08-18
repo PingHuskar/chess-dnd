@@ -1,0 +1,19 @@
+{
+    "ignoreWords": [
+        "hitbox",
+        "xcss",
+        "xsmall",
+        "xxsmall",
+        "chesscom",
+        "akcss",
+        "dynboard",
+        "Avenir",
+        "xlarge",
+        "iswhitetile",
+        "Coor",
+    ],
+    "ignorePaths": [
+        "task-data.tsx",
+        ".gitignore",
+    ]
+}

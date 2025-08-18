@@ -29,6 +29,7 @@
     "@atlaskit/primitives": "^14.10.2",
     "@atlaskit/tokens": "^5.6.2",
     "@tailwindcss/vite": "^4.1.11",
+    "iswhitetile": "^2.1.0",
     "lucide-react": "^0.539.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

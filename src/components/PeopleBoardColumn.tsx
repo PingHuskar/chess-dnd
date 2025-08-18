@@ -520,6 +520,7 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
 
   return (
     <>
+      <hr />
       <input
         type="text"
         defaultValue=""
@@ -528,10 +529,10 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
         placeholder="Group"
       />
       <button type="button" onClick={handleAddColumn}>
-        Add
+        Add Group
       </button>
       <button type="button" onClick={handleRemoveColumn}>
-        Remove
+        Remove Group
       </button>
       <hr />
       {/* {JSON.stringify(data)}

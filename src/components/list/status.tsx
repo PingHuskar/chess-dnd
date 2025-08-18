@@ -13,7 +13,7 @@ const label: { [Key in TStatus]: string } = {
     done: 'Done',
 };
 
-export function Status({ status }: { status: TStatus }) {
+export function Status({ status }: { readonly status: TStatus }) {
     return (
         <div className="flex w-[100px] justify-end">
             <span

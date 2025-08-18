@@ -39,7 +39,7 @@ const stateStyles: { [Key in TaskState['type']]?: HTMLAttributes<HTMLDivElement>
 
 const idle: TaskState = { type: 'idle' };
 
-export function Task({ task }: { task: TTask }) {
+export function Task({ task }: { readonly task: TTask }) {
     const ref = useRef<HTMLDivElement | null>(null);
     const [state, setState] = useState<TaskState>(idle);
 
@@ -143,6 +143,6 @@ export function Task({ task }: { task: TTask }) {
 }
 
 // A simplified version of our task for the user to drag around
-function DragPreview({ task }: { task: TTask }) {
+function DragPreview({ task }: { readonly task: TTask }) {
     return <div className="border-solid rounded p-2 bg-white">{task.content}</div>;
 }

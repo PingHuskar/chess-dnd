@@ -58,8 +58,8 @@ export type BoardState = {
 };
 
 export type BoardExampleProps = {
-  height: number,
-  initData: () => BoardState
+  readonly height: number,
+  readonly initData: () => BoardState
 }
 
 export default function ChessBoard({ height, initData }: BoardExampleProps) {
@@ -155,7 +155,6 @@ export default function ChessBoard({ height, initData }: BoardExampleProps) {
        */
       entry.actionMenuTrigger.focus();
 
-      return;
     }
   }, [lastOperation, registry]);
 
@@ -467,15 +466,13 @@ export default function ChessBoard({ height, initData }: BoardExampleProps) {
   }, [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId]);
 
   return (
-    <>
-      <BoardContext.Provider value={contextValue}>
-        {/* {JSON.stringify(data)} */}
-        <Board height={height}>
-          {data.orderedColumnIds.map((columnId) => {
-            return <Column height={height - 20} column={data.columnMap[columnId]} key={columnId} />;
-          })}
-        </Board>
-      </BoardContext.Provider>
-    </>
+    <BoardContext.Provider value={contextValue}>
+      {/* {JSON.stringify(data)} */}
+      <Board height={height}>
+        {data.orderedColumnIds.map((columnId) => {
+          return <Column height={height - 20} column={data.columnMap[columnId]} key={columnId} />;
+        })}
+      </Board>
+    </BoardContext.Provider>
   );
 }

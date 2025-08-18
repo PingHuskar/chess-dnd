@@ -92,6 +92,7 @@ const buttonColumnStyles = xcss({
 type CardPrimitiveProps = {
   closestEdge: Edge | null;
   item: Person;
+  group_title: string;
   state: State;
   actionMenuTriggerRef?: Ref<HTMLButtonElement>;
 };
@@ -180,10 +181,11 @@ function LazyDropdownItems({ userId }: { readonly userId: string }) {
 
 const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
   function CardPrimitive(
-    { closestEdge, item, state, actionMenuTriggerRef },
+    { closestEdge, item, group_title, state, actionMenuTriggerRef },
     ref
   ) {
     const { imgSrc, name, role, userId } = item;
+    // console.log(item)
 
     return (
       <Grid
@@ -196,9 +198,12 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
           baseStyles,
           stateStyles[state.type],
           xcss({
-            backgroundColor: `elevation.surface`,
+            // backgroundColor: `elevation.surface`,
+            backgroundColor: `color.background.warning`,
+            // backgroundColor: group_title == role ? "color.background.accent.green.subtlest" : `elevation.surface`,
             ":hover": {
-              backgroundColor: "color.background.accent.blue.subtlest",
+              // backgroundColor: "color.background.accent.blue.subtlest",
+              backgroundColor: group_title.toLocaleLowerCase() == role ? "color.background.accent.green.subtlest" : `color.background.accent.red.bolder`,
             },
           }),
         ]}
@@ -211,9 +216,9 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
           <Heading size="xsmall" as="span">
             {name}
           </Heading>
-          <Box as="small" xcss={noMarginStyles}>
+          {/* <Box as="small" xcss={noMarginStyles}>
             {role}
-          </Box>
+          </Box> */}
         </Stack>
         <div className="" style={{ visibility: `hidden` }}>
           <Box xcss={buttonColumnStyles}>
@@ -249,7 +254,8 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
   }
 );
 
-export const Card = memo(function Card({ item }: { item: Person }) {
+export const Card = memo(function Card({ item, group_title = "" }: { item: Person, group_title: string }) {
+  // console.log(item)
   const ref = useRef<HTMLDivElement | null>(null);
   const { userId } = item;
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
@@ -346,6 +352,7 @@ export const Card = memo(function Card({ item }: { item: Person }) {
       <CardPrimitive
         ref={ref}
         item={item}
+        group_title={group_title}
         state={state}
         closestEdge={closestEdge}
         actionMenuTriggerRef={actionMenuTriggerRef}
@@ -366,7 +373,7 @@ export const Card = memo(function Card({ item }: { item: Person }) {
               height: state.rect.height,
             }}
           >
-            <CardPrimitive item={item} state={state} closestEdge={null} />
+            <CardPrimitive item={item} group_title={group_title} state={state} closestEdge={null} />
           </Box>,
           state.container
         )}

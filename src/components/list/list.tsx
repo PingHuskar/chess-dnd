@@ -77,23 +77,29 @@ export function List() {
 
     return (
         <div className="pt-6 my-0 mx-auto w-full">
-            <div className="">isSorted: {`${isSorted}`}</div>
-            <div className="flex flex-row w-full h-28 flex-wrap gap-2 border border-solid rounded p-2">
-                {tasks.map((task) => (
-                    <Task key={task.id} task={task} />
-                ))}
-            </div>
-            <button type="button" onClick={handleShuffleTasks}>
-                Shuffle
-            </button>
-            <button type="button" onClick={handleCheckSorted}>
-                Check Sort
-            </button>
-            <ol className={`text-left list-decimal`}>
-                {tasks.map((t, i) => {
-                    return <li key={i}>{t.content}</li>
+            <div className="flex flex-col justify-center">
+                <div className="">isSorted: {`${isSorted}`}</div>
+                <div className="flex flex-row justify-center">
+                    <div className="flex flex-col w-96 h-full flex-wrap gap-2 border border-solid rounded p-2 text-left">
+                        {tasks.map((task) => (
+                            <Task key={task.id} task={task} />
+                        ))}
+                    </div>
+                </div>
+                <div className="">
+                    <button type="button" onClick={handleShuffleTasks}>
+                        Shuffle
+                    </button>
+                    <button type="button" onClick={handleCheckSorted}>
+                        Check Sort
+                    </button>
+                </div>
+                {/* <ol className={`text-left list-decimal`}>
+                {tasks.map((t) => {
+                    return <li key={t.content}>{t.content}</li>
                 })}
-            </ol>
+            </ol> */}
+            </div>
         </div>
     );
 }
