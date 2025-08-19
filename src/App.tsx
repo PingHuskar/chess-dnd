@@ -11,6 +11,8 @@ import knights from './components/board/data/chess/knights';
 import knightMovesGrid from "./knightMovesGrid";
 import { TimeControlList } from './components/timecontrollist/list';
 import { TimeZoneList } from './components/timezonelist/list';
+import randomBishopMoveArray from './components/board/data/chess/randomBishopMoveArray';
+import shuffle from './components/list/shuffle';
 
 function App() {
 
@@ -35,9 +37,8 @@ function App() {
           advanced: getColumnItems(opening, "advanced"),
           trolled: getColumnItems(opening, "trolled"),
         };
-        const base = getBasicData(columnMap);
         return {
-          ...base,
+          ...getBasicData(columnMap),
           lastOperation: null,
         };
       }} />
@@ -48,9 +49,8 @@ function App() {
           intermediate: getColumnItems(opening, "intermediate"),
           advanced: getColumnItems(opening, "advanced"),
         };
-        const base = getBasicData(columnMap);
         return {
-          ...base,
+          ...getBasicData(columnMap),
           lastOperation: null,
         };
       }} />
@@ -61,9 +61,21 @@ function App() {
           white: getCoorItems(tiles, "white"),
           black: getCoorItems(tiles, "black"),
         };
-        const base = getBasicData(columnMap);
         return {
-          ...base,
+          ...getBasicData(columnMap),
+          lastOperation: null,
+        };
+      }} />
+      <hr />
+      <Board height={800} showMatrix={true} initData={() => {
+        const bishopMoves = shuffle(randomBishopMoveArray());
+        const columnMap: ColumnMap = {
+          NA: getCoorItems(bishopMoves, "NA"),
+          IsDiagonal: getCoorItems(bishopMoves, "IsDiagonal"),
+          IsNotDiagonal: getCoorItems(bishopMoves, "IsNotDiagonal"),
+        };
+        return {
+          ...getBasicData(columnMap),
           lastOperation: null,
         };
       }} />
@@ -77,9 +89,8 @@ function App() {
           N6: getCoorItems(knights, "N6"),
           N8: getCoorItems(knights, "N8"),
         };
-        const base = getBasicData(columnMap);
         return {
-          ...base,
+          ...getBasicData(columnMap),
           lastOperation: null,
         };
       }} />
@@ -95,9 +106,8 @@ function App() {
       <hr />
       <PeopleBoardColumn
         initData={() => {
-          const base = getPeople();
           return {
-            ...base,
+            ...getPeople(),
             lastOperation: null,
           };
         }}
@@ -105,9 +115,8 @@ function App() {
       <hr />
       <PeopleBoardRow
         initData={() => {
-          const base = getPeople();
           return {
-            ...base,
+            ...getPeople(),
             lastOperation: null,
           };
         }}

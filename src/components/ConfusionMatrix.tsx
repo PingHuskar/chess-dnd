@@ -35,6 +35,44 @@ function WhiteBlack({ data }: { readonly data: any }) {
     </div>
 }
 
+function BishopMove({ data }: { readonly data: any }) {
+    const [
+        TPs,
+        FPs,
+        FNs,
+        TNs,
+    ] = [
+            data.columnMap.IsDiagonal.items.filter((i: any) => i.role === "IsDiagonal").length,
+            data.columnMap.IsDiagonal.items.filter((i: any) => i.role === "IsNotDiagonal").length,
+            data.columnMap.IsNotDiagonal.items.filter((i: any) => i.role === "IsDiagonal").length,
+            data.columnMap.IsNotDiagonal.items.filter((i: any) => i.role === "IsNotDiagonal").length
+        ]
+    return <div className={`flex w-full justify-center `}>
+        <table className={`border-2`}>
+            <thead className={`border-2`}>
+                <tr>
+                    <th>{((TPs + TNs) / (TPs + TNs + FPs + FNs) * 100).toFixed(2)}%</th>
+                    <th className={`border-2`}>Actual IsDiagonal</th>
+                    <th className={`border-2`}>Actual IsNotDiagonal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr className={`border-2`}>
+                    <td>Answer IsDiagonal</td>
+                    <td className={`border-2`}>{TPs}</td>
+                    <td className={`border-2`}>{FPs}</td>
+                </tr>
+                <tr className={`border-2`}>
+                    <td>Answer IsNotDiagonal</td>
+                    <td className={`border-2`}>{FNs}</td>
+                    <td className={`border-2`}>{TNs}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+
 function KnightLegal({ data }: { data: any }) {
     const [
         countCorrect,
@@ -81,6 +119,8 @@ export default function ConfusionMatrix({ matrix, data }: ConfusionMatrixProps) 
             return <WhiteBlack data={data} />;
         case `KnightLegal`:
             return <KnightLegal data={data} />;
+        case `BishopMove`:
+            return <BishopMove data={data} />;
 
         default:
             break;

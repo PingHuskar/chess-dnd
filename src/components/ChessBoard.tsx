@@ -483,8 +483,17 @@ export default function ChessBoard({ height, initData, showMatrix = false }: Boa
       {showMatrix
         && data.columnMap.N2
         && data.columnMap.N3
+        && data.columnMap.N4
+        && data.columnMap.N6
+        && data.columnMap.N8
         &&
         <ConfusionMatrix matrix={`KnightLegal`} data={data} />
+      }
+      {showMatrix
+        && data.columnMap.IsDiagonal
+        && data.columnMap.IsNotDiagonal
+        &&
+        <ConfusionMatrix matrix={`BishopMove`} data={data} />
       }
     </BoardContext.Provider>
   );
