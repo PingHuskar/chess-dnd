@@ -9,6 +9,7 @@ import { List } from './components/list/list';
 import tiles from './components/board/data/chess/tiles';
 import knights from './components/board/data/chess/knights';
 import knightMovesGrid from "./knightMovesGrid";
+import { TimeControlList } from './components/timecontrollist/list';
 
 function App() {
 
@@ -18,6 +19,9 @@ function App() {
       <List />
       <br />
       <hr />
+      <TimeControlList />
+      <br />
+      <hr />
       <br />
       <Board height={1200} initData={() => {
         const columnMap: ColumnMap = {
@@ -25,9 +29,7 @@ function App() {
           beginner: getColumnItems(opening, "beginner"),
           intermediate: getColumnItems(opening, "intermediate"),
           advanced: getColumnItems(opening, "advanced"),
-          blitz: getColumnItems(opening, "blitz"),
-          bullet: getColumnItems(opening, "bullet"),
-          tournament: getColumnItems(opening, "tournament"),
+          trolled: getColumnItems(opening, "trolled"),
         };
         const base = getBasicData(columnMap);
         return {
