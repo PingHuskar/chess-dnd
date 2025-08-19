@@ -8,13 +8,14 @@ import { reorderWithEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/r
 import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish/trigger-post-move-flash';
 import { flushSync } from 'react-dom';
 import isTimeControlSorted from './isTimeControlSorted';
+import shuffle from './shuffle';
 
 export function TimeControlList() {
-    const [tasks, setTasks] = useState<TTask[]>(() => getTimeControls());
+    const [tasks, setTasks] = useState<any[]>(() => getTimeControls());
     const [isSorted, setIsSorted] = useState<boolean | undefined>(undefined)
 
     const handleShuffleTasks = () => {
-        setTasks(getTimeControls())
+        setTasks(shuffle(getTimeControls()))
         setIsSorted(undefined)
     }
 

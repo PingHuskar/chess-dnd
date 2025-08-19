@@ -1,5 +1,4 @@
 import capitalizeFirstLetter from "./capitalizeFirstLetter";
-import shuffle from "./shuffle";
 
 export type TStatus = 'todo' | 'in-progress' | 'done';
 export type TTask = {
@@ -49,7 +48,7 @@ const tasks: tasksProps[] = [
 ];
 
 export function getTimeControls() {
-    return shuffle(tasks.filter(z => z)).map((t, i) => ({
+    return tasks.filter(z => z).map((t, i) => ({
         id: `${i}`,
         content: capitalizeFirstLetter(t.text),
         status: t.time

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getTasks, type TTask } from './task-data';
+import { getTimeZones, type TTask } from './task-data';
 import { Task } from './task';
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { isTaskData } from './task-data';
@@ -10,18 +10,18 @@ import { flushSync } from 'react-dom';
 import isTaskSorted from './isTaskSorted';
 import shuffle from './shuffle';
 
-export function List() {
-    const [tasks, setTasks] = useState<TTask[]>(() => getTasks());
+export function TimeZoneList() {
+    const [tasks, setTasks] = useState<TTask[]>(() => getTimeZones());
     const [isSorted, setIsSorted] = useState<boolean | undefined>(undefined)
 
     const handleShuffleTasks = () => {
-        setTasks(shuffle(getTasks()))
+        setTasks(shuffle(getTimeZones()))
         setIsSorted(undefined)
     }
 
     const handleCheckSorted = () => {
         setIsSorted(() => {
-            return isTaskSorted(tasks, ["op", "md", "en"])
+            return isTaskSorted(tasks)
         })
     }
 

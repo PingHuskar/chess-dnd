@@ -32,6 +32,7 @@
     "iswhitetile": "^2.1.0",
     "lucide-react": "^0.539.0",
     "react": "^19.1.1",
+    "react-big-calendar": "^1.19.4",
     "react-dom": "^19.1.1",
     "tailwindcss": "^4.1.11"
   },

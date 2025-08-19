@@ -1,5 +1,3 @@
-import shuffle from "./shuffle";
-
 export type TStatus = 'todo' | 'in-progress' | 'done';
 export type TTask = {
     readonly id: string;
@@ -77,7 +75,7 @@ const tasks: any[] = [
 ];
 
 export function getTasks() {
-    return shuffle(tasks.filter(z => z)).map((t, i) => ({
+    return tasks.filter(z => z).map((t, i) => ({
         id: `${i}`,
         content: t.text,
         status: t.phase

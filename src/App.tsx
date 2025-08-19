@@ -10,12 +10,16 @@ import tiles from './components/board/data/chess/tiles';
 import knights from './components/board/data/chess/knights';
 import knightMovesGrid from "./knightMovesGrid";
 import { TimeControlList } from './components/timecontrollist/list';
+import { TimeZoneList } from './components/timezonelist/list';
 
 function App() {
 
   return (
     <>
       <h2>Vertical Sort</h2>
+      <TimeZoneList />
+      <br />
+      <hr />
       <List />
       <br />
       <hr />
