@@ -66,6 +66,7 @@ export type BoardExampleProps = {
 export default function PeopleBoard({ initData }: BoardExampleProps) {
   const [data, setData] = useState<BoardState>(initData);
 
+  const ref_item = useRef<HTMLInputElement>(null)
   const ref_group = useRef<HTMLInputElement>(null)
 
   const stableData = useRef(data);
@@ -519,6 +520,38 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
     }));
   }, [])
 
+  function handleAddItem() {
+    console.log(`handleAddItem is called`)
+    if (!ref_item.current?.value) return;
+    console.log(`ref_item value is exist`)
+    if (!ref_group.current?.value) return;
+    console.log(`ref_group value is exist`)
+    handleAddColumn();
+    const newItem: string = ref_item.current?.value;
+    const thisGroup: string = ref_group.current?.value;
+    setData(prev => ({
+      ...prev,
+      orderedColumnIds: unique([...prev.orderedColumnIds, thisGroup]),
+      columnMap: {
+        ...prev.columnMap,
+        [thisGroup]: {
+          title: thisGroup,
+          columnId: thisGroup,
+          items: [...prev.columnMap[thisGroup].items, {
+            "userId": `id:${newItem}` + `${Math.random()}`.slice(2,),
+            "name": newItem,
+            "role": "",
+            "avatarUrl": ""
+          }]
+        }
+      },
+    }));
+    setH(data.orderedColumnIds.length)
+    setCountCards(data.orderedColumnIds.reduce(
+      (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+      0
+    ))
+  }
   function handleAddColumn() {
     if (!ref_group.current?.value) return;
     if (data.orderedColumnIds.includes(ref_group.current?.value)) return;
@@ -556,6 +589,16 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
 
   return (
     <>
+      <input
+        type="text"
+        defaultValue=""
+        ref={ref_item}
+        className={`border-2`}
+        placeholder="Item"
+      />
+      <button type="button" onClick={handleAddItem}>
+        Add Item
+      </button>
       <hr />
       <input
         type="text"
