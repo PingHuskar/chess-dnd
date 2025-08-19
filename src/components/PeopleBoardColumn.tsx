@@ -322,6 +322,7 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
       columnId: string;
       userId: string;
     }) => {
+      console.log(`removeCard is called`)
       setData((data) => {
         const column = data.columnMap[columnId];
         const updatedItems = column.items.filter(

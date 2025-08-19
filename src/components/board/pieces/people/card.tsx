@@ -197,6 +197,8 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
     const { columnId } = useColumnContext();
 
     const onContextMenu = (event: React.MouseEvent) => {
+      console.log(`onContextMenu is called`)
+      console.log({ columnId, userId })
       event.preventDefault();
       if (removeCard) {
         removeCard({ columnId, userId });
@@ -204,16 +206,18 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
     };
 
     return (
-      <Grid
-        ref={ref}
-        testId={`item-${userId}`}
-        templateColumns="auto 1fr auto"
-        columnGap="space.100"
-        alignItems="center"
-        xcss={[baseStyles, stateStyles[state.type]]}
+      <div
+        className={`flex flex-row`}
         onContextMenu={onContextMenu}
       >
-        <div className={`flex flex-row`}>
+        <Grid
+          ref={ref}
+          testId={`item-${userId}`}
+          templateColumns="auto 1fr auto"
+          columnGap="space.100"
+          alignItems="center"
+          xcss={[baseStyles, stateStyles[state.type]]}
+        >
           <Box as="span" xcss={noPointerEventsStyles}>
             {/* <Avatar size="large" src={avatarUrl} /> */}
             <Inline alignBlock="center" alignInline="center" xcss={xcss({
@@ -264,8 +268,8 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
           {closestEdge && (
             <DropIndicator edge={closestEdge} gap={token("space.100", "0")} />
           )}
-        </div>
-      </Grid>
+        </Grid>
+      </div>
     );
   }
 );
