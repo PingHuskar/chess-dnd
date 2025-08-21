@@ -28,23 +28,23 @@ import unique from "../lib/unique";
 
 export type Outcome =
   | {
-    type: "column-reorder";
-    columnId: string;
-    startIndex: number;
-    finishIndex: number;
-  }
+      type: "column-reorder";
+      columnId: string;
+      startIndex: number;
+      finishIndex: number;
+    }
   | {
-    type: "card-reorder";
-    columnId: string;
-    startIndex: number;
-    finishIndex: number;
-  }
+      type: "card-reorder";
+      columnId: string;
+      startIndex: number;
+      finishIndex: number;
+    }
   | {
-    type: "card-move";
-    finishColumnId: string;
-    itemIndexInStartColumn: number;
-    itemIndexInFinishColumn: number;
-  };
+      type: "card-move";
+      finishColumnId: string;
+      itemIndexInStartColumn: number;
+      itemIndexInFinishColumn: number;
+    };
 
 export type Trigger = "pointer" | "keyboard";
 
@@ -60,14 +60,13 @@ export type BoardState = {
 };
 
 export type BoardExampleProps = {
-  readonly initData: () => BoardState
-}
+  readonly initData: () => BoardState;
+};
 
 export default function PeopleBoard({ initData }: BoardExampleProps) {
   const [data, setData] = useState<BoardState>(initData);
-
-  const ref_item = useRef<HTMLInputElement>(null)
-  const ref_group = useRef<HTMLInputElement>(null)
+  const ref_item = useRef<HTMLInputElement>(null);
+  const ref_group = useRef<HTMLInputElement>(null);
 
   const stableData = useRef(data);
   useEffect(() => {
@@ -94,7 +93,8 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
       triggerPostMoveFlash(entry.element);
 
       liveRegion.announce(
-        `You've moved ${sourceColumn.title} from position ${startIndex + 1
+        `You've moved ${sourceColumn.title} from position ${
+          startIndex + 1
         } to position ${finishIndex + 1} of ${orderedColumnIds.length}.`
       );
 
@@ -116,8 +116,10 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${startIndex + 1
-        } to position ${finishIndex + 1} of ${column.items.length} in the ${column.title
+        `You've moved ${item.name} from position ${
+          startIndex + 1
+        } to position ${finishIndex + 1} of ${column.items.length} in the ${
+          column.title
         } column.`
       );
 
@@ -148,8 +150,10 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${itemIndexInStartColumn + 1
-        } to position ${finishPosition} in the ${destinationColumn.title
+        `You've moved ${item.name} from position ${
+          itemIndexInStartColumn + 1
+        } to position ${finishPosition} in the ${
+          destinationColumn.title
         } column.`
       );
 
@@ -316,14 +320,8 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
   );
 
   const removeCard = useCallback(
-    ({
-      columnId,
-      userId,
-    }: {
-      columnId: string;
-      userId: string;
-    }) => {
-      console.log(`removeCard is called`)
+    ({ columnId, userId }: { columnId: string; userId: string }) => {
+      console.log(`removeCard is called`);
       setData((data) => {
         const column = data.columnMap[columnId];
         const updatedItems = column.items.filter(
@@ -502,34 +500,44 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
       registerColumn: registry.registerColumn,
       instanceId,
     };
-  }, [getColumns, reorderColumn, reorderCard, registry, moveCard, instanceId, removeCard]);
+  }, [
+    getColumns,
+    reorderColumn,
+    reorderCard,
+    registry,
+    moveCard,
+    instanceId,
+    removeCard,
+  ]);
 
   const [h, setH] = useState(data.orderedColumnIds.length);
-  const [countCards, setCountCards] = useState(data.orderedColumnIds.reduce(
-    (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
-    0
-  ));
+  const [countCards, setCountCards] = useState(
+    data.orderedColumnIds.reduce(
+      (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+      0
+    )
+  );
 
   const estimateHeadingHeightAndGap = 40 + 8;
   const estimateCardHeight = 110;
 
   useEffect(() => {
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
       // orderedColumnIds: [...prev.orderedColumnIds, "g5"],
     }));
-  }, [])
+  }, []);
 
   function handleAddItem() {
-    console.log(`handleAddItem is called`)
+    console.log(`handleAddItem is called`);
     if (!ref_item.current?.value) return;
-    console.log(`ref_item value is exist`)
+    console.log(`ref_item value is exist`);
     if (!ref_group.current?.value) return;
-    console.log(`ref_group value is exist`)
+    console.log(`ref_group value is exist`);
     handleAddColumn();
     const newItem: string = ref_item.current?.value;
     const thisGroup: string = ref_group.current?.value;
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
       orderedColumnIds: unique([...prev.orderedColumnIds, thisGroup]),
       columnMap: {
@@ -537,96 +545,137 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
         [thisGroup]: {
           title: thisGroup,
           columnId: thisGroup,
-          items: [...prev.columnMap[thisGroup].items, {
-            "userId": `id:${newItem}` + `${Math.random()}`.slice(2,),
-            "name": newItem,
-            "role": "",
-            "avatarUrl": ""
-          }]
-        }
+          items: [
+            ...prev.columnMap[thisGroup].items,
+            {
+              userId: `id:${newItem}` + `${Math.random()}`.slice(2),
+              name: newItem,
+              role: "",
+              avatarUrl: "",
+            },
+          ],
+        },
       },
     }));
-    setH(data.orderedColumnIds.length)
-    setCountCards(data.orderedColumnIds.reduce(
-      (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
-      0
-    ))
+    setH(data.orderedColumnIds.length);
+    setCountCards(
+      data.orderedColumnIds.reduce(
+        (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+        0
+      )
+    );
   }
   function handleAddColumn() {
     if (!ref_group.current?.value) return;
     if (data.orderedColumnIds.includes(ref_group.current?.value)) return;
     const newGroup: string = ref_group.current?.value;
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
       orderedColumnIds: unique([...prev.orderedColumnIds, newGroup]),
       columnMap: {
         ...prev.columnMap,
-        [newGroup]: { title: newGroup, columnId: newGroup, items: [] }
+        [newGroup]: { title: newGroup, columnId: newGroup, items: [] },
       },
     }));
-    setH(data.orderedColumnIds.length)
-    setCountCards(data.orderedColumnIds.reduce(
-      (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
-      0
-    ))
+    setH(data.orderedColumnIds.length);
+    setCountCards(
+      data.orderedColumnIds.reduce(
+        (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+        0
+      )
+    );
   }
   function handleRemoveColumn() {
     if (!ref_group.current?.value) return;
     const group: string = ref_group.current?.value;
     const { [group]: removedColumn, ...newColumnMap } = data.columnMap;
 
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
-      orderedColumnIds: prev.orderedColumnIds.filter(id => id != group),
+      orderedColumnIds: prev.orderedColumnIds.filter((id) => id != group),
       columnMap: newColumnMap,
     }));
-    setH(data.orderedColumnIds.length)
-    setCountCards(data.orderedColumnIds.reduce(
-      (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
-      0
-    ))
+    setH(data.orderedColumnIds.length);
+    setCountCards(
+      data.orderedColumnIds.reduce(
+        (sum, id) => sum + (data.columnMap[id]?.items?.length ?? 0),
+        0
+      )
+    );
   }
 
+  const handlePopItem = useCallback(() => {
+    if (!ref_group.current?.value) return;
+    const group: string = ref_group.current.value;
+
+    setData((prev) => {
+      const groupItems = prev.columnMap[group]?.items;
+      if (!groupItems || groupItems.length === 0) return prev;
+
+      return {
+        ...prev,
+        columnMap: {
+          ...prev.columnMap,
+          [group]: {
+            ...prev.columnMap[group],
+            items: groupItems.slice(1),
+          },
+        },
+      };
+    });
+
+    setCountCards((prev) => prev - 1);
+  }, []);
+
   return (
-    <>
-      <input
-        type="text"
-        defaultValue=""
-        ref={ref_item}
-        className={`border-2`}
-        placeholder="Item"
-      />
-      <button type="button" onClick={handleAddItem}>
-        Add Item
-      </button>
+    <div className={`flex flex-col justify-items-start`}>
+      <div className="">
+        <input
+          type="text"
+          defaultValue=""
+          ref={ref_item}
+          className={`border-2`}
+          placeholder="Item"
+        />
+        <button type="button" onClick={handleAddItem}>
+          Add Item
+        </button>
+      </div>
       <hr />
-      <input
-        type="text"
-        defaultValue=""
-        ref={ref_group}
-        className={`border-2`}
-        placeholder="Group"
-      />
-      <button type="button" onClick={handleAddColumn}>
-        Add Group
-      </button>
-      <button type="button" onClick={handleRemoveColumn}>
-        Remove Group
-      </button>
+      <div className="">
+        <input
+          type="text"
+          defaultValue=""
+          ref={ref_group}
+          className={`border-2`}
+          placeholder="Group"
+        />
+        <button type="button" onClick={handleAddColumn}>
+          Add Group
+        </button>
+        <button type="button" onClick={handleRemoveColumn}>
+          Remove Group
+        </button>
+        <button type="button" onClick={handlePopItem}>
+          Pop Item
+        </button>
+      </div>
       <hr />
       {/* {JSON.stringify(data)}
       <hr /> */}
       <BoardContext.Provider value={contextValue}>
-        <Board height={countCards * estimateCardHeight + h * estimateHeadingHeightAndGap}>
+        <Board
+          height={Math.max(
+            countCards * estimateCardHeight + h * estimateHeadingHeightAndGap,
+            screen.height / 1.5
+          )}
+        >
           {data.orderedColumnIds.map((columnId) => {
             // console.log(data.columnMap[columnId])
-            return <Column
-              column={data.columnMap[columnId]}
-              key={columnId}
-            />;
+            return <Column column={data.columnMap[columnId]} key={columnId} />;
           })}
         </Board>
       </BoardContext.Provider>
-    </>
+    </div>
   );
 }
