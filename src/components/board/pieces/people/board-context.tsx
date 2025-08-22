@@ -9,6 +9,8 @@ import type { ColumnType } from "../../data/people";
 export type BoardContextValue = {
   getColumns: () => ColumnType[];
 
+  editItem: (columnId: string, userId: string, name: string) => void;
+
   reorderColumn: (args: { startIndex: number; finishIndex: number }) => void;
 
   reorderCard: (args: {

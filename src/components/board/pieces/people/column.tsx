@@ -37,24 +37,24 @@ import {
   // useColumnContext,
 } from "./column-context";
 
-const getColumnStyle = (
+const getColumnStyle = () =>
   // height: string
-) => {
-  return xcss({
-    width: "250px",
-    // height,
-    backgroundColor: "elevation.surface.sunken",
-    borderRadius: "border.radius.300",
-    // eslint-disable-next-line @atlaskit/ui-styling-standard/no-unsafe-values, @atlaskit/ui-styling-standard/no-imported-style-values
-    transition: `background ${durations.medium}ms ${easeInOut}`,
-    position: "relative",
-    /**
-     * TODO: figure out hover color.
-     * There is no `elevation.surface.sunken.hovered` token,
-     * so leaving this for now.
-     */
-  });
-}
+  {
+    return xcss({
+      width: "250px",
+      // height,
+      backgroundColor: "elevation.surface.sunken",
+      borderRadius: "border.radius.300",
+      // eslint-disable-next-line @atlaskit/ui-styling-standard/no-unsafe-values, @atlaskit/ui-styling-standard/no-imported-style-values
+      transition: `background ${durations.medium}ms ${easeInOut}`,
+      position: "relative",
+      /**
+       * TODO: figure out hover color.
+       * There is no `elevation.surface.sunken.hovered` token,
+       * so leaving this for now.
+       */
+    });
+  };
 
 const stackStyles = xcss({
   // allow the container to be shrunk by a parent height
@@ -292,12 +292,13 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
         testId={`column-${columnId}`}
         ref={columnRef}
         direction="row"
-        xcss={[getColumnStyle(
+        xcss={[
+          getColumnStyle(),
           // `${column.items.length == 0
           // ? heightIfColumnEmpty
           // : (column.items.length + 0.5) * eachCardHeight}px`
-        )
-          , stateStyles[state.type]]}
+          stateStyles[state.type],
+        ]}
       >
         {/* This element takes up the same visual space as the column.
           We are using a separate element so we can have two drop targets
@@ -328,6 +329,7 @@ export const Column = memo(function Column({ column }: { column: ColumnType }) {
                 {column.items.map((item) => (
                   <Card
                     item={item}
+                    columnId={columnId} // Add this prop
                     key={item.userId}
                     removeCard={removeCard}
                   />

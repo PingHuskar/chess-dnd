@@ -204,7 +204,10 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
             // backgroundColor: group_title == role ? "color.background.accent.green.subtlest" : `elevation.surface`,
             ":hover": {
               // backgroundColor: "color.background.accent.blue.subtlest",
-              backgroundColor: group_title.toLocaleLowerCase() == role.toLocaleLowerCase() ? "color.background.accent.green.subtlest" : `color.background.accent.red.bolder`,
+              backgroundColor:
+                group_title.toLocaleLowerCase() == role.toLocaleLowerCase()
+                  ? "color.background.accent.green.subtlest"
+                  : `color.background.accent.red.bolder`,
             },
           }),
         ]}
@@ -217,11 +220,11 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
           <Heading size="xsmall" as="span">
             {name}
           </Heading>
-          {debugComponent &&
+          {debugComponent && (
             <Box as="small" xcss={noMarginStyles}>
               {role}
             </Box>
-          }
+          )}
         </Stack>
 
         <div className="" style={{ visibility: `hidden` }}>
@@ -233,7 +236,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
                     actionMenuTriggerRef
                       ? mergeRefs([triggerRef, actionMenuTriggerRef])
                       : // Workaround for IconButton typing issue
-                      mergeRefs([triggerRef])
+                        mergeRefs([triggerRef])
                   }
                   icon={(iconProps) => <MoreIcon {...iconProps} size="small" />}
                   label={`Move ${name}`}
@@ -258,8 +261,15 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
   }
 );
 
-export const Card = memo(function Card({ item, group_title = "" }: { item: Person, group_title: string }) {
-  // console.log(item)
+type CardProps = {
+  item: Person;
+  group_title: string;
+};
+
+export const Card = memo(function Card({
+  item,
+  group_title = "",
+}: Readonly<CardProps>) {
   const ref = useRef<HTMLDivElement | null>(null);
   const { userId } = item;
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
@@ -377,7 +387,12 @@ export const Card = memo(function Card({ item, group_title = "" }: { item: Perso
               height: state.rect.height,
             }}
           >
-            <CardPrimitive item={item} group_title={group_title} state={state} closestEdge={null} />
+            <CardPrimitive
+              item={item}
+              group_title={group_title}
+              state={state}
+              closestEdge={null}
+            />
           </Box>,
           state.container
         )}

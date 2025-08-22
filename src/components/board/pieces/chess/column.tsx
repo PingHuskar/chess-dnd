@@ -52,7 +52,7 @@ const getColumnStyle = (height: string) => {
      * so leaving this for now.
      */
   });
-}
+};
 
 const stackStyles = xcss({
   // allow the container to be shrunk by a parent height
@@ -138,7 +138,13 @@ const isDraggingStyles = xcss({
   opacity: 0.4,
 });
 
-export const Column = memo(function Column({ height, column }: { height: number, column: ColumnType }) {
+export const Column = memo(function Column({
+  height,
+  column,
+}: {
+  height: number;
+  column: ColumnType;
+}) {
   const columnId = column.columnId;
   const columnRef = useRef<HTMLDivElement | null>(null);
   const columnInnerRef = useRef<HTMLDivElement | null>(null);
@@ -316,7 +322,11 @@ export const Column = memo(function Column({ height, column }: { height: number,
             <Box xcss={scrollContainerStyles} ref={scrollableRef}>
               <Stack xcss={cardListStyles} space="space.100">
                 {column.items.map((item) => (
-                  <Card item={item} group_title={column.title} key={item.userId} />
+                  <Card
+                    item={item}
+                    group_title={column.title}
+                    key={item.userId}
+                  />
                 ))}
               </Stack>
             </Box>
@@ -343,7 +353,11 @@ const safariPreviewStyles = xcss({
   padding: "space.200",
 });
 
-function SafariColumnPreview({ column }: { column: ColumnType }) {
+type SafariColumnPreviewProps = {
+  column: ColumnType;
+};
+
+function SafariColumnPreview({ column }: Readonly<SafariColumnPreviewProps>) {
   return (
     <Box xcss={[columnHeaderStyles, safariPreviewStyles]}>
       <Heading size="xxsmall" as="span">
@@ -352,70 +366,3 @@ function SafariColumnPreview({ column }: { column: ColumnType }) {
     </Box>
   );
 }
-
-// function ActionMenu() {
-//   return (
-//     <DropdownMenu
-//       trigger={DropdownMenuTrigger}
-//       shouldRenderToParent={fg(
-//         "should-render-to-parent-should-be-true-design-syst"
-//       )}
-//     >
-//       <ActionMenuItems />
-//     </DropdownMenu>
-//   );
-// }
-
-// function ActionMenuItems() {
-//   const { columnId } = useColumnContext();
-//   const { getColumns, reorderColumn } = useBoardContext();
-
-//   const columns = getColumns();
-//   const startIndex = columns.findIndex(
-//     (column) => column.columnId === columnId
-//   );
-
-//   const moveLeft = useCallback(() => {
-//     reorderColumn({
-//       startIndex,
-//       finishIndex: startIndex - 1,
-//     });
-//   }, [reorderColumn, startIndex]);
-
-//   const moveRight = useCallback(() => {
-//     reorderColumn({
-//       startIndex,
-//       finishIndex: startIndex + 1,
-//     });
-//   }, [reorderColumn, startIndex]);
-
-//   const isMoveLeftDisabled = startIndex === 0;
-//   const isMoveRightDisabled = startIndex === columns.length - 1;
-
-//   return (
-//     <DropdownItemGroup>
-//       <DropdownItem onClick={moveLeft} isDisabled={isMoveLeftDisabled}>
-//         Move left
-//       </DropdownItem>
-//       <DropdownItem onClick={moveRight} isDisabled={isMoveRightDisabled}>
-//         Move right
-//       </DropdownItem>
-//     </DropdownItemGroup>
-//   );
-// }
-
-// function DropdownMenuTrigger({
-//   triggerRef,
-//   ...triggerProps
-// }: CustomTriggerProps) {
-//   return (
-//     <IconButton
-//       ref={mergeRefs([triggerRef])}
-//       appearance="subtle"
-//       label="Actions"
-//       spacing="compact"
-//       icon={(iconProps) => <MoreIcon {...iconProps} size="small" />}
-//       {...triggerProps}
-//     />
-//   );
-// }

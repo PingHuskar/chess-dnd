@@ -4,6 +4,7 @@ import {
   memo,
   type Ref,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -42,11 +43,10 @@ import { dropTargetForExternal } from "@atlaskit/pragmatic-drag-and-drop/externa
 // eslint-disable-next-line @atlaskit/design-system/no-emotion-primitives -- to be migrated to @atlaskit/primitives/compiled
 import { Box, Grid, Inline, Stack, xcss } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
-// import Avatar from "@atlaskit/avatar";
 
 import { type ColumnType, type Person } from "../../data/people";
 
-import { useBoardContext } from "./board-context";
+import { BoardContext, useBoardContext } from "./board-context";
 import { useColumnContext } from "./column-context";
 
 type State =
@@ -199,6 +199,8 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
       }
     };
 
+    const { editItem } = useContext(BoardContext);
+
     return (
       <div className={`flex flex-row`} onContextMenu={onContextMenu}>
         <Grid
@@ -234,11 +236,11 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
               width: `140px`,
             })}
           >
-            {/* add inline edit here https://atlassian.design/components/inline-edit/examples */}
             <Heading color="color.text.warning.inverse" size="xsmall" as="span">
-              {name}
+              <span onClick={() => editItem(columnId, item.userId, item.name)}>
+                {name}
+              </span>
             </Heading>
-            {/* <InlineEditDefaultExample /> */}
             <Box as="small" xcss={noMarginStyles}>
               {role}
             </Box>
@@ -400,6 +402,7 @@ export const Card = memo(function Card({
   removeCard,
 }: {
   item: Person;
+  columnId: string;
   removeCard: (args: { columnId: string; userId: string }) => void;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -536,6 +539,12 @@ function createDraggable({
   });
 }
 
+type DragPreviewArgs = {
+  location: any;
+  source: any;
+  nativeSetDragImage: any;
+};
+
 function generateDragPreview({
   element,
   setState,
@@ -543,7 +552,7 @@ function generateDragPreview({
   element: HTMLElement;
   setState: React.Dispatch<React.SetStateAction<State>>;
 }) {
-  return ({ location, source, nativeSetDragImage }: any) => {
+  return ({ location, source, nativeSetDragImage }: DragPreviewArgs) => {
     const rect = source.element.getBoundingClientRect();
 
     setCustomNativeDragPreview({

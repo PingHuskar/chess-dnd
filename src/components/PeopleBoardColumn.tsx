@@ -25,6 +25,7 @@ import { Column } from "./board/pieces/people/column";
 import { createRegistry } from "./board/pieces/people/registry";
 
 import unique from "../lib/unique";
+import Button, { ButtonGroup } from "@atlaskit/button";
 
 export type Outcome =
   | {
@@ -355,6 +356,64 @@ export default function PeopleBoard({ initData }: Readonly<BoardExampleProps>) {
 
   const [instanceId] = useState(() => Symbol("instance-id"));
 
+  // Function to handle editing an item
+  const handleEditItem = useCallback(
+    (columnId: string, userId: string, currentName: string) => {
+      setEditingItem({ columnId, userId, name: currentName });
+    },
+    []
+  );
+
+  const [editingItem, setEditingItem] = useState<{
+    columnId: string;
+    userId: string;
+    name: string;
+  } | null>(null);
+  const editInputRef = useRef<HTMLInputElement>(null);
+
+  // Function to save the edited item name
+  const handleSaveEdit = useCallback(() => {
+    if (!editingItem || !editInputRef.current?.value) return;
+
+    const newName = editInputRef.current.value.trim();
+    if (!newName) return;
+
+    setData((prev) => {
+      const column = prev.columnMap[editingItem.columnId];
+      if (!column) return prev;
+
+      const updatedItems = column.items.map((item) =>
+        item.userId === editingItem.userId ? { ...item, name: newName } : item
+      );
+
+      return {
+        ...prev,
+        columnMap: {
+          ...prev.columnMap,
+          [editingItem.columnId]: {
+            ...column,
+            items: updatedItems,
+          },
+        },
+      };
+    });
+
+    setEditingItem(null);
+  }, [editingItem]);
+
+  // Function to cancel editing
+  const handleCancelEdit = useCallback(() => {
+    setEditingItem(null);
+  }, []);
+
+  // Focus edit input when editing starts
+  useEffect(() => {
+    if (editingItem && editInputRef.current) {
+      editInputRef.current.focus();
+      editInputRef.current.select();
+    }
+  }, [editingItem]);
+
   useEffect(() => {
     return combine(
       monitorForElements({
@@ -501,6 +560,7 @@ export default function PeopleBoard({ initData }: Readonly<BoardExampleProps>) {
       reorderCard,
       moveCard,
       removeCard,
+      editItem: handleEditItem, // Add edit function to context
       registerCard: registry.registerCard,
       registerColumn: registry.registerColumn,
       instanceId,
@@ -513,6 +573,7 @@ export default function PeopleBoard({ initData }: Readonly<BoardExampleProps>) {
     moveCard,
     instanceId,
     removeCard,
+    handleEditItem, // Add dependency
   ]);
 
   const [h, setH] = useState(data.orderedColumnIds.length);
@@ -687,6 +748,34 @@ export default function PeopleBoard({ initData }: Readonly<BoardExampleProps>) {
         <button type="button" onClick={handleAddItem}>
           Add Item
         </button>
+        {editingItem && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+            <div className="w-96 h-20 top-1/2 left-3/7">
+              <div className="bg-white p-4 rounded-lg">
+                <h3 className="text-lg font-bold mb-2">Edit Item Name</h3>
+                <input
+                  ref={editInputRef}
+                  type="text"
+                  defaultValue={editingItem.name}
+                  placeholder={editingItem.name}
+                  className="border-2 p-2 w-full mb-2"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveEdit();
+                    if (e.ctrlKey) handleCancelEdit();
+                  }}
+                />
+                <ButtonGroup>
+                  <Button appearance="primary" onClick={handleSaveEdit}>
+                    Save
+                  </Button>
+                  <Button appearance="subtle" onClick={handleCancelEdit}>
+                    Discard
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <hr />
       <div className="">
