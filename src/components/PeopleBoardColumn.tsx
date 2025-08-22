@@ -60,13 +60,16 @@ export type BoardState = {
 };
 
 export type BoardExampleProps = {
-  readonly initData: () => BoardState;
+  initData: () => BoardState;
 };
 
-export default function PeopleBoard({ initData }: BoardExampleProps) {
+export default function PeopleBoard({ initData }: Readonly<BoardExampleProps>) {
   const [data, setData] = useState<BoardState>(initData);
   const ref_item = useRef<HTMLInputElement>(null);
-  const ref_group = useRef<HTMLInputElement>(null);
+  const [ref_group, ref_group2] = [
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+  ];
 
   const stableData = useRef(data);
   useEffect(() => {
@@ -291,7 +294,9 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
           ...data.columnMap,
           [startColumnId]: {
             ...sourceColumn,
-            items: sourceColumn.items.filter((i) => i.userId !== item.userId),
+            items: sourceColumn.items.filter(
+              (i: any) => i.userId !== item.userId
+            ),
           },
           [finishColumnId]: {
             ...destinationColumn,
@@ -325,7 +330,7 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
       setData((data) => {
         const column = data.columnMap[columnId];
         const updatedItems = column.items.filter(
-          (item) => item.userId !== userId
+          (item: any) => item.userId !== userId
         );
 
         const updatedSourceColumn: ColumnType = {
@@ -399,7 +404,7 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
             invariant(typeof sourceId === "string");
             const sourceColumn = data.columnMap[sourceId];
             const itemIndex = sourceColumn.items.findIndex(
-              (item) => item.userId === itemId
+              (item: any) => item.userId === itemId
             );
 
             if (location.current.dropTargets.length === 1) {
@@ -445,7 +450,7 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
               const destinationColumn = data.columnMap[destinationColumnId];
 
               const indexOfTarget = destinationColumn.items.findIndex(
-                (item) => item.userId === destinationCardRecord.data.itemId
+                (item: any) => item.userId === destinationCardRecord.data.itemId
               );
               const closestEdgeOfTarget: Edge | null = extractClosestEdge(
                 destinationCardRecord.data
@@ -518,8 +523,8 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
     )
   );
 
-  const estimateHeadingHeightAndGap = 40 + 8;
-  const estimateCardHeight = 110;
+  const estimateHeadingHeightAndGap = 15;
+  const estimateCardHeight = 90;
 
   useEffect(() => {
     setData((prev) => ({
@@ -584,6 +589,48 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
         0
       )
     );
+  }
+
+  function handleDuplicateColumn() {
+    if (!ref_group.current?.value) return;
+    if (!ref_group2.current?.value) return;
+    const group: string = ref_group.current?.value;
+    const group2: string = ref_group2.current?.value;
+    // Check if source column exists
+    if (!data.columnMap[group]) {
+      console.error(`Source column "${group}" does not exist`);
+      return;
+    }
+
+    // Check if target column already exists
+    if (data.columnMap[group2]) {
+      console.error(`Target column "${group2}" already exists`);
+      return;
+    }
+
+    const sourceColumn = data.columnMap[group];
+
+    // Deep clone the items to avoid reference issues
+    const duplicatedItems = sourceColumn.items.map((item) => ({
+      ...item,
+      userId: `id:${item.name}-copy-${Math.random().toString(36)}`,
+    }));
+
+    setData((prev) => ({
+      ...prev,
+      orderedColumnIds: [...prev.orderedColumnIds, group2],
+      columnMap: {
+        ...prev.columnMap,
+        [group2]: {
+          title: group2,
+          columnId: group2,
+          items: duplicatedItems,
+        },
+      },
+    }));
+
+    setH((prev) => prev + 1);
+    setCountCards((prev) => prev + duplicatedItems.length);
   }
   function handleRemoveColumn() {
     if (!ref_group.current?.value) return;
@@ -650,8 +697,18 @@ export default function PeopleBoard({ initData }: BoardExampleProps) {
           className={`border-2`}
           placeholder="Group"
         />
+        <input
+          type="text"
+          defaultValue=""
+          ref={ref_group2}
+          className={`border-2`}
+          placeholder="Group2"
+        />
         <button type="button" onClick={handleAddColumn}>
           Add Group
+        </button>
+        <button type="button" onClick={handleDuplicateColumn}>
+          Duplicate Group
         </button>
         <button type="button" onClick={handleRemoveColumn}>
           Remove Group

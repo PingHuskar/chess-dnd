@@ -27,23 +27,23 @@ import ConfusionMatrix from "./ConfusionMatrix";
 
 export type Outcome =
   | {
-    type: "column-reorder";
-    columnId: string;
-    startIndex: number;
-    finishIndex: number;
-  }
+      type: "column-reorder";
+      columnId: string;
+      startIndex: number;
+      finishIndex: number;
+    }
   | {
-    type: "card-reorder";
-    columnId: string;
-    startIndex: number;
-    finishIndex: number;
-  }
+      type: "card-reorder";
+      columnId: string;
+      startIndex: number;
+      finishIndex: number;
+    }
   | {
-    type: "card-move";
-    finishColumnId: string;
-    itemIndexInStartColumn: number;
-    itemIndexInFinishColumn: number;
-  };
+      type: "card-move";
+      finishColumnId: string;
+      itemIndexInStartColumn: number;
+      itemIndexInFinishColumn: number;
+    };
 
 export type Trigger = "pointer" | "keyboard";
 
@@ -59,12 +59,16 @@ export type BoardState = {
 };
 
 export type BoardExampleProps = {
-  readonly height: number,
-  readonly initData: () => BoardState,
-  readonly showMatrix?: boolean,
-}
+  height: number;
+  initData: () => BoardState;
+  showMatrix?: boolean;
+};
 
-export default function ChessBoard({ height, initData, showMatrix = false }: BoardExampleProps) {
+export default function ChessBoard({
+  height,
+  initData,
+  showMatrix = false,
+}: Readonly<BoardExampleProps>) {
   const [data, setData] = useState<BoardState>(initData);
 
   const stableData = useRef(data);
@@ -92,7 +96,8 @@ export default function ChessBoard({ height, initData, showMatrix = false }: Boa
       triggerPostMoveFlash(entry.element);
 
       liveRegion.announce(
-        `You've moved ${sourceColumn.title} from position ${startIndex + 1
+        `You've moved ${sourceColumn.title} from position ${
+          startIndex + 1
         } to position ${finishIndex + 1} of ${orderedColumnIds.length}.`
       );
 
@@ -114,8 +119,10 @@ export default function ChessBoard({ height, initData, showMatrix = false }: Boa
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${startIndex + 1
-        } to position ${finishIndex + 1} of ${column.items.length} in the ${column.title
+        `You've moved ${item.name} from position ${
+          startIndex + 1
+        } to position ${finishIndex + 1} of ${column.items.length} in the ${
+          column.title
         } column.`
       );
 
@@ -146,8 +153,10 @@ export default function ChessBoard({ height, initData, showMatrix = false }: Boa
       }
 
       liveRegion.announce(
-        `You've moved ${item.name} from position ${itemIndexInStartColumn + 1
-        } to position ${finishPosition} in the ${destinationColumn.title
+        `You've moved ${item.name} from position ${
+          itemIndexInStartColumn + 1
+        } to position ${finishPosition} in the ${
+          destinationColumn.title
         } column.`
       );
 
@@ -156,7 +165,6 @@ export default function ChessBoard({ height, initData, showMatrix = false }: Boa
        * This means we need to manually restore focus to it.
        */
       entry.actionMenuTrigger.focus();
-
     }
   }, [lastOperation, registry]);
 
@@ -471,30 +479,31 @@ export default function ChessBoard({ height, initData, showMatrix = false }: Boa
     <BoardContext.Provider value={contextValue}>
       <Board height={height}>
         {data.orderedColumnIds.map((columnId) => {
-          return <Column height={height - 20} column={data.columnMap[columnId]} key={columnId} />;
+          return (
+            <Column
+              height={height - 20}
+              column={data.columnMap[columnId]}
+              key={columnId}
+            />
+          );
         })}
       </Board>
-      {showMatrix
-        && data.columnMap.white
-        && data.columnMap.black
-        &&
+      {showMatrix && data.columnMap.white && data.columnMap.black && (
         <ConfusionMatrix matrix={`WhiteBlack`} data={data} />
-      }
-      {showMatrix
-        && data.columnMap.N2
-        && data.columnMap.N3
-        && data.columnMap.N4
-        && data.columnMap.N6
-        && data.columnMap.N8
-        &&
-        <ConfusionMatrix matrix={`KnightLegal`} data={data} />
-      }
-      {showMatrix
-        && data.columnMap.IsDiagonal
-        && data.columnMap.IsNotDiagonal
-        &&
-        <ConfusionMatrix matrix={`BishopMove`} data={data} />
-      }
+      )}
+      {showMatrix &&
+        data.columnMap.N2 &&
+        data.columnMap.N3 &&
+        data.columnMap.N4 &&
+        data.columnMap.N6 &&
+        data.columnMap.N8 && (
+          <ConfusionMatrix matrix={`KnightLegal`} data={data} />
+        )}
+      {showMatrix &&
+        data.columnMap.IsDiagonal &&
+        data.columnMap.IsNotDiagonal && (
+          <ConfusionMatrix matrix={`BishopMove`} data={data} />
+        )}
     </BoardContext.Provider>
   );
 }

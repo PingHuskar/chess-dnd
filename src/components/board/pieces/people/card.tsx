@@ -12,7 +12,7 @@ import {
 import ReactDOM from "react-dom";
 import invariant from "tiny-invariant";
 
-import Image from '@atlaskit/image';
+import Image from "@atlaskit/image";
 import { IconButton } from "@atlaskit/button/new";
 import DropdownMenu, {
   DropdownItem,
@@ -40,15 +40,9 @@ import { preserveOffsetOnSource } from "@atlaskit/pragmatic-drag-and-drop/elemen
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 import { dropTargetForExternal } from "@atlaskit/pragmatic-drag-and-drop/external/adapter";
 // eslint-disable-next-line @atlaskit/design-system/no-emotion-primitives -- to be migrated to @atlaskit/primitives/compiled
-import {
-  Box,
-  Grid,
-  Inline,
-  Stack,
-  xcss,
-} from "@atlaskit/primitives";
+import { Box, Grid, Inline, Stack, xcss } from "@atlaskit/primitives";
 import { token } from "@atlaskit/tokens";
-import Avatar from "@atlaskit/avatar";
+// import Avatar from "@atlaskit/avatar";
 
 import { type ColumnType, type Person } from "../../data/people";
 
@@ -95,7 +89,7 @@ const stateStyles: {
 
 const buttonColumnStyles = xcss({
   alignSelf: "start",
-  display: `none`
+  display: `none`,
 });
 
 type CardPrimitiveProps = {
@@ -197,8 +191,8 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
     const { columnId } = useColumnContext();
 
     const onContextMenu = (event: React.MouseEvent) => {
-      console.log(`onContextMenu is called`)
-      console.log({ columnId, userId })
+      console.log(`onContextMenu is called`);
+      console.log({ columnId, userId });
       event.preventDefault();
       if (removeCard) {
         removeCard({ columnId, userId });
@@ -206,10 +200,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
     };
 
     return (
-      <div
-        className={`flex flex-row`}
-        onContextMenu={onContextMenu}
-      >
+      <div className={`flex flex-row`} onContextMenu={onContextMenu}>
         <Grid
           ref={ref}
           testId={`item-${userId}`}
@@ -220,23 +211,34 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
         >
           <Box as="span" xcss={noPointerEventsStyles}>
             {/* <Avatar size="large" src={avatarUrl} /> */}
-            <Inline alignBlock="center" alignInline="center" xcss={xcss({
-              objectFit: `none`,
-              // height: `50px`
-              width: `80px`
-            })}>
+            <Inline
+              alignBlock="center"
+              alignInline="center"
+              xcss={xcss({
+                objectFit: `none`,
+                // height: `50px`
+                width: `80px`,
+              })}
+            >
               <Image src={avatarUrl} alt="Simple example" testId="image" />
               {/* <Avatar size="large" src={"/src/components/board/data/people/images/chesscom/BennyWatts.png"} /> */}
             </Inline>
           </Box>
 
-          <Stack space="space.100" id={`Stack-${name}`} grow="fill" xcss={xcss({
-            textAlign: `center`,
-            width: `140px`,
-          })}>
+          <Stack
+            space="space.100"
+            id={`Stack-${name}`}
+            grow="fill"
+            xcss={xcss({
+              textAlign: `center`,
+              width: `140px`,
+            })}
+          >
+            {/* add inline edit here https://atlassian.design/components/inline-edit/examples */}
             <Heading color="color.text.warning.inverse" size="xsmall" as="span">
               {name}
             </Heading>
+            {/* <InlineEditDefaultExample /> */}
             <Box as="small" xcss={noMarginStyles}>
               {role}
             </Box>
@@ -249,7 +251,7 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
                     actionMenuTriggerRef
                       ? mergeRefs([triggerRef, actionMenuTriggerRef])
                       : // Workaround for IconButton typing issue
-                      mergeRefs([triggerRef])
+                        mergeRefs([triggerRef])
                   }
                   icon={(iconProps) => <MoreIcon {...iconProps} size="small" />}
                   label={`Move ${name}`}
@@ -393,7 +395,13 @@ const CardPrimitive = forwardRef<HTMLDivElement, CardPrimitiveProps>(
 //   );
 // });
 
-export const Card = memo(function Card({ item, removeCard }: { item: Person; removeCard: (args: { columnId: string; userId: string }) => void; }) {
+export const Card = memo(function Card({
+  item,
+  removeCard,
+}: {
+  item: Person;
+  removeCard: (args: { columnId: string; userId: string }) => void;
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
   const actionMenuTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -424,11 +432,11 @@ export const Card = memo(function Card({ item, removeCard }: { item: Person; rem
         removeCard={removeCard}
       />
 
-      {state.type === 'preview' &&
+      {state.type === "preview" &&
         ReactDOM.createPortal(
           <Box
             style={{
-              boxSizing: 'border-box',
+              boxSizing: "border-box",
               width: state.rect.width,
               height: state.rect.height,
             }}
@@ -450,7 +458,7 @@ function useRegisterCard({
   actionMenuTriggerRef,
   ref,
   registerCard,
-  userId
+  userId,
 }: any) {
   useEffect(() => {
     invariant(actionMenuTriggerRef.current);
@@ -521,7 +529,7 @@ function createDraggable({
 }) {
   return draggable({
     element,
-    getInitialData: () => ({ type: 'card', itemId: userId, instanceId }),
+    getInitialData: () => ({ type: "card", itemId: userId, instanceId }),
     onGenerateDragPreview: generateDragPreview({ element, setState }),
     onDragStart: () => setState(draggingState),
     onDrop: () => setState(idleState),
@@ -535,7 +543,7 @@ function generateDragPreview({
   element: HTMLElement;
   setState: React.Dispatch<React.SetStateAction<State>>;
 }) {
-  return ({ location, source, nativeSetDragImage }: DragPreviewArgs) => {
+  return ({ location, source, nativeSetDragImage }: any) => {
     const rect = source.element.getBoundingClientRect();
 
     setCustomNativeDragPreview({
@@ -545,7 +553,7 @@ function generateDragPreview({
         input: location.current.input,
       }),
       render({ container }) {
-        setState({ type: 'preview', container, rect });
+        setState({ type: "preview", container, rect });
         return () => setState(draggingState);
       },
     });
@@ -580,7 +588,7 @@ function isSameInstanceCard(
   source: { data: { instanceId: symbol; type: string } },
   instanceId: symbol
 ) {
-  return source.data.instanceId === instanceId && source.data.type === 'card';
+  return source.data.instanceId === instanceId && source.data.type === "card";
 }
 
 function getDropData({
@@ -592,11 +600,11 @@ function getDropData({
   element: HTMLElement;
   userId: string;
 }) {
-  const data = { type: 'card', itemId: userId };
+  const data = { type: "card", itemId: userId };
   return attachClosestEdge(data, {
     input,
     element,
-    allowedEdges: ['top', 'bottom'],
+    allowedEdges: ["top", "bottom"],
   });
 }
 
